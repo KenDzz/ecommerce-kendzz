@@ -23,6 +23,10 @@ Route::get('/', [HomeController::class, 'index'])->middleware('is_verify_email')
 Route::get('/category/{id}', [ProductController::class, 'categoryProduct'])->middleware('is_verify_email')->name('category-product');
 Route::get('/product-{id}/{slug}', [ProductController::class, 'detailProduct'])->middleware('is_verify_email')->name('detail-product');
 Route::post('/getsize', [ProductController::class, 'getSize'])->middleware('is_verify_email')->name('get-size');
+Route::post('add-to-cart', [ProductController::class, 'addToCart'])->name('add.to.cart');
+Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('update.cart');
+Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove.from.cart');
+Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('remove.from.cart');
 
 Route::prefix('auth')->name('auth')->group(function () {
     Route::get('/', [AuthenticationController::class, 'index'])->name('-login');

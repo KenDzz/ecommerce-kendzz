@@ -18,6 +18,7 @@
   -->
   <link rel="stylesheet" href="{{ url('css/style-prefix.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="{{url('css/notiflix-3.2.6.min.css')}}">
 
   <!--
     - google font link
@@ -120,7 +121,7 @@
     @include('layouts.navbar')
 
 
-
+    @include('home.cart')
 
 
   <!--
@@ -139,6 +140,8 @@
     - custom js link
   -->
   <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
+  <script src="{{url('js/notiflix-3.2.6.min.js')}}"></script>
+
   <script src="{{ url('js/script.js') }}"></script>
   <script src="{{ url('js/product.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>

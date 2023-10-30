@@ -50,4 +50,63 @@ class ProductController extends Controller
 
     }
 
+    public function addToCart(Request $request){
+        $data['status'] = false;
+        $checkInfo = $request->validate([
+            'id' => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric', 'min:1'],
+            'category' => [],
+            'size' => [],
+        ]);
+        $product = Product::findOrFail($checkInfo['id']);
+        $productType = $product->productType->where('id',$checkInfo['category'])->first();
+        $productSize = $productType->productSize->where('id',$checkInfo['size'])->first();
+
+        $cart = session()->get('cart', []);
+        $id = $checkInfo['id'].$checkInfo['category'].$checkInfo['size'];
+        $productMedia = $product->productMedia->first();
+        $image = $productMedia->url;
+        if($productType && $productType->count() > 0){
+            $image = $productType->img_url;
+        }
+        if(isset($cart[$id])) {
+            $cart[$id]['quantity'] = $checkInfo['quantity'];
+            $data['status'] = true;
+        } else {
+            $cart[$id] = [
+                "name" => $product->name,
+                "quantity" => $checkInfo['quantity'],
+                "category" => $productType->name,
+                "size" => $productSize != null ? $productSize->name : "",
+                "price" => $product->price,
+                "image" => $image
+            ];
+            $data['status'] = true;
+        }
+        session()->put('cart', $cart);
+        return response()->json($data);
+
+    }
+
+    public function removeToCart(Request $request)
+    {
+        $data['status'] = false;
+        $checkInfo = $request->validate([
+            'id' => ['required', 'numeric'],
+        ]);
+        if($checkInfo['id']) {
+            $cart = session()->get('cart');
+            if(isset($cart[$checkInfo['id']])) {
+                unset($cart[$checkInfo['id']]);
+                session()->put('cart', $cart);
+            }
+            $data['status'] = true;
+        }
+        return response()->json($data);
+    }
+
+    public function reloadCart(){
+        return response()->json(['cart' => session('cart')]);
+    }
+
 }

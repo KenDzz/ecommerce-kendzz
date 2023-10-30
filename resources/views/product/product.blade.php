@@ -6,7 +6,7 @@
     <div class="container mx-auto">
         <div class="product-featured">
             <div class="showcase-wrapper has-scrollbar">
-                <div class="showcase-container">
+                <div class="showcase-container product-content" productId="{{$product->id}}">
 
                     <div class="showcase">
 
@@ -87,8 +87,8 @@
                                                 <span class="m-auto text-2xl font-thin">−</span>
                                             </button>
                                             <input type="number"
-                                                class="flex items-center w-full font-semibold text-center text-gray-700 bg-gray-300 outline-none focus:outline-none text-md hover:text-black focus:text-black md:text-basecursor-default"
-                                                name="custom-input-number" value="0"></input>
+                                                class="flex items-center w-full font-semibold text-center text-gray-700 bg-gray-300 outline-none custom-input-number-product focus:outline-none text-md hover:text-black focus:text-black md:text-basecursor-default"
+                                                 value="0"></input>
                                             <button data-action="increment"
                                                 class="w-20 h-full text-gray-600 bg-gray-300 rounded-r cursor-pointer hover:text-gray-700 hover:bg-gray-400">
                                                 <span class="m-auto text-2xl font-thin">+</span>
@@ -98,6 +98,7 @@
                                 </div>
                             </div>
 
+                            @if (!$productTypes->isEmpty() && $productTypes->count() > 0)
                             <div class="flex choose-category">
                                 <div class="flex-initial w-32 mt-auto mb-auto">
                                     <p class="inline-block text-sm align-middle text-zinc-400">Phân loại</p>
@@ -157,6 +158,7 @@
 
                                 </div>
                             </div>
+                            @endif
 
                             <div class="flex choose-size">
                             </div>
@@ -165,10 +167,10 @@
 
                             <div class="flex mt-5">
                                 <div class="flex-none">
-                                    <button class="add-cart-btn">Mua</button>
+                                    <button class="add-cart-btn btn-buy-product">Mua</button>
                                 </div>
                                 <div class="flex-none ml-2">
-                                    <button class="add-cart-btn">Thêm vào giỏ hàng</button>
+                                    <button class="add-cart-btn btn-add-product-to-cart">Thêm vào giỏ hàng</button>
                                 </div>
                             </div>
 

@@ -13,6 +13,11 @@ $(document).ready(function () {
         }
     );
 
+    $(document).on("click",".btn-delete-product-cart",function () {
+        removeCart($('.li-product-cart').attr('data-id'));
+    }
+);
+
     $("input[type=radio][name=category-choice]").change(function () {
         // Xóa lớp CSS 'active' từ tất cả các nút kích thước
         $(".choose-category label").removeClass("active");
@@ -26,6 +31,127 @@ $(document).ready(function () {
             }
         }
     });
+
+    $(".btn-add-product-to-cart").on("click", function() {
+        var id = $('.product-content').attr('productId');
+        var quantity = $('.custom-input-number-product').val();
+        var size = $('input[type=radio][name=size-choice]:checked').val();
+        var category = $('input[type=radio][name=category-choice]:checked').val();
+        if(quantity < 1){
+            Notiflix.Notify.failure(
+                "Số lượng sản phẩm phải lớn hơn 0"
+            );
+            return;
+        }
+
+        if($('.choose-category').length > 0 && category == null){
+            Notiflix.Notify.failure(
+                "Vui lòng chọn loại sản phẩm!"
+            );
+            return;
+        }
+
+        if($('.list-product-size').length > 0 && size == null){
+            Notiflix.Notify.failure(
+                "Vui lòng kích cở sản phẩm!"
+            );
+            return;
+        }
+        addCart(id,quantity,category,size);
+    });
+
+    function reloadCart() {
+        $.ajax({
+            url: "/reload-cart",
+            method: "get",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+        })
+        .done(function (data) {
+            $(".list-product-cart").html("");
+            var data = data["cart"];
+            var totalPrice = 0;
+            $.each(data, function(i, item) {
+                var price = data[i].quantity * data[i].price;
+                totalPrice += price;
+                var totalPriceFormat = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                var htmlSize = "";
+                if(data[i].size != null){
+                    htmlSize += ","+data[i].size;
+                }
+                $(".list-product-cart").append('<li class="flex py-6 li-product-cart" data-id="'+i+'"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="/'+data[i].image+'" alt="" class="object-cover object-center w-full h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="#">'+data[i].name+'</a></h3><p class="ml-4">'+totalPriceFormat+'</p></div><p class="mt-1 text-sm text-gray-500">'+data[i].category+' '+htmlSize+' </p></div><div class="flex items-end justify-between flex-1 text-sm"><p class="text-gray-500">'+data[i].quantity+'</p><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-cart">Xóa</button></div></div></div></li>');
+            })
+            $(".total-price-cart").html(totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+            $(".count-cart").html(Object.keys(data).length);
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+        });
+
+    }
+
+    function removeCart(id) {
+        $.ajax({
+            url: "/remove-from-cart",
+            method: "delete",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                id: id,
+            },
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+        })
+        .done(function (data) {
+            if(data["status"] == true){
+                reloadCart();
+            }
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+        });
+
+    }
+
+    function addCart(id,quantity,category,size) {
+        $.ajax({
+            url: "/add-to-cart",
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                id: id,
+                quantity: quantity,
+                category: category,
+                size: size
+            },
+            beforeSend: function () {
+                Notiflix.Loading.standard();
+            },
+            complete: function () {
+                Notiflix.Loading.remove();
+            },
+        })
+        .done(function (data) {
+            if(data["status"] == true){
+                reloadCart();
+            }
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+
+        });
+
+    }
 
     function getsize(id) {
         $.ajax({
@@ -67,11 +193,22 @@ $(document).ready(function () {
                             );
                         }
                     });
-                } else {
                 }
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
+});
+
+const cartButton = document.querySelector('.action-btn.btn-cart');
+const cartSlideOver = document.querySelector('.form-cart');
+const closeCart = document.querySelector('.btn-hidden-cart');
+
+cartButton.addEventListener('click', () => {
+  cartSlideOver.classList.toggle('hidden');
+});
+
+closeCart.addEventListener('click', () => {
+    cartSlideOver.classList.toggle('hidden');
 });
 
 document.addEventListener("DOMContentLoaded", function () {

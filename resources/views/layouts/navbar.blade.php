@@ -95,9 +95,13 @@
             <span class="count">0</span>
           </button>
 
-          <button class="action-btn">
+          <button class="action-btn btn-cart">
             <ion-icon name="bag-handle-outline"></ion-icon>
-            <span class="count">0</span>
+            @if(session()->has('cart') && is_array(session('cart')))
+                <span class="count count-cart">{{ count(session('cart')) }}</span>
+            @else
+                <span class="count count-cart">0</span>
+            @endif
           </button>
 
         </div>
@@ -382,7 +386,7 @@
 
     </div>
 
-    <nav class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+    <nav class="mobile-navigation-menu has-scrollbar" data-mobile-menu>
 
       <div class="menu-top">
         <h2 class="menu-title">Menu</h2>
