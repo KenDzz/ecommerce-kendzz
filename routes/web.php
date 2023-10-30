@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->middleware('is_verify_email')->name('index');
 Route::get('/category/{id}', [ProductController::class, 'categoryProduct'])->middleware('is_verify_email')->name('category-product');
 Route::get('/product-{id}/{slug}', [ProductController::class, 'detailProduct'])->middleware('is_verify_email')->name('detail-product');
+Route::post('/getsize', [ProductController::class, 'getSize'])->middleware('is_verify_email')->name('get-size');
 
 Route::prefix('auth')->name('auth')->group(function () {
     Route::get('/', [AuthenticationController::class, 'index'])->name('-login');

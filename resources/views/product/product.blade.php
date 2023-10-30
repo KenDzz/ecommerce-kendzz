@@ -108,38 +108,49 @@
                                         <fieldset class="mt-4">
                                             <legend class="sr-only">Choose a size</legend>
                                             <div class="grid grid-cols-4 gap-4">
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer group hover:bg-gray-50 focus:outline-none sm:flex-1 hover:scale-105 active:bg-indigo-500 active:text-white">
-                                                    <img src="https://dummyimage.com/800x700/ffffff/000000&text=second"
-                                                        alt="XXS Size Image" class="object-cover w-8 h-8 mr-2" />
-                                                    <input type="radio" id="category-choice" name="category-choice"
-                                                        value="XS" class="sr-only"
-                                                        aria-labelledby="category-choice-1-label">
-                                                    <span id="category-choice-1-label">Áo đỏ</span>
 
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
+                                                @foreach ($productTypes as $productType)
+                                                    @if ($productType->quantity > 0)
+                                                        <label
+                                                            class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer group hover:bg-gray-50 focus:outline-none sm:flex-1 hover:scale-105 active:bg-indigo-500 active:text-white">
+                                                            <img src="/{{ $productType->img_url }}"
+                                                                alt="{{ $productType->name }}"
+                                                                class="object-cover w-8 h-8 mr-2" />
+                                                            <input type="radio" id="category-choice"
+                                                                name="category-choice" value="{{ $productType->id }}"
+                                                                class="sr-only" aria-labelledby="category-choice-1-label">
+                                                            <span
+                                                                id="category-choice-1-label">{{ $productType->name }}</span>
 
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-200 uppercase transition duration-300 ease-in-out border rounded-md cursor-not-allowed active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1 bg-gray-50">
-                                                    <img src="https://dummyimage.com/800x700/ffffff/000000&text=second"
-                                                        alt="XXS Size Image" class="object-cover w-8 h-8 mr-2" />
+                                                            <span class="absolute rounded-md pointer-events-none -inset-px"
+                                                                aria-hidden="true"></span>
+                                                        </label>
+                                                    @else
+                                                        <label
+                                                            class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-200 uppercase transition duration-300 ease-in-out border rounded-md cursor-not-allowed active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1 bg-gray-50">
+                                                            <img src="/{{ $productType->img_url }}"
+                                                                alt="{{ $productType->name }}"
+                                                                class="object-cover w-8 h-8 mr-2" />
 
-                                                    <input type="radio" id="category-choice" name="category-choice"
-                                                        value="XXXL" disabled class="sr-only"
-                                                        aria-labelledby="category-choice-7-label">
-                                                    <span id="category-choice-7-label">Áo tím</span>
-                                                    <span aria-hidden="true"
-                                                        class="absolute border-2 border-gray-200 rounded-md pointer-events-none -inset-px">
-                                                        <svg class="absolute inset-0 w-full h-full text-gray-200 stroke-2"
-                                                            viewBox="0 0 100 100" preserveAspectRatio="none"
-                                                            stroke="currentColor">
-                                                            <line x1="0" y1="100" x2="100"
-                                                                y2="0" vector-effect="non-scaling-stroke" />
-                                                        </svg>
-                                                    </span>
-                                                </label>
+                                                            <input type="radio" id="category-choice"
+                                                                name="category-choice" value="{{ $productType->id }}"
+                                                                disabled class="sr-only"
+                                                                aria-labelledby="category-choice-7-label">
+                                                            <span
+                                                                id="category-choice-7-label">{{ $productType->name }}</span>
+                                                            <span aria-hidden="true"
+                                                                class="absolute border-2 border-gray-200 rounded-md pointer-events-none -inset-px">
+                                                                <svg class="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                                                    viewBox="0 0 100 100" preserveAspectRatio="none"
+                                                                    stroke="currentColor">
+                                                                    <line x1="0" y1="100" x2="100"
+                                                                        y2="0" vector-effect="non-scaling-stroke" />
+                                                                </svg>
+                                                            </span>
+                                                        </label>
+                                                    @endif
+                                                @endforeach
+
                                             </div>
                                         </fieldset>
                                     </div>
@@ -148,110 +159,6 @@
                             </div>
 
                             <div class="flex choose-size">
-                                <div class="flex-initial w-32 mt-auto mb-auto">
-                                    <p class="inline-block text-sm align-middle text-zinc-400">Kích cỡ</p>
-                                </div>
-                                <div class="flex-none ml-2">
-                                    <!-- Sizes -->
-                                    <div class="mt-10">
-                                        <div class="flex items-center justify-between">
-                                            <a href="#"
-                                                class="text-sm font-medium text-indigo-600 hover:text-indigo-500">Size
-                                                guide</a>
-                                        </div>
-
-                                        <fieldset class="mt-4">
-                                            <legend class="sr-only">Choose a size</legend>
-                                            <div class="grid grid-cols-4 gap-4">
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="XXS" class="sr-only"
-                                                        aria-labelledby="size-choice-0-label">
-                                                    <span id="size-choice-0-label">XXS</span>
-
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <!-- Active: "ring-2 ring-indigo-500" -->
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="XS" class="sr-only"
-                                                        aria-labelledby="size-choice-1-label">
-                                                    <span id="size-choice-1-label">XS</span>
-
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="S" class="sr-only"
-                                                        aria-labelledby="size-choice-2-label">
-                                                    <span id="size-choice-2-label">S</span>
-
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="M" class="sr-only"
-                                                        aria-labelledby="size-choice-3-label">
-                                                    <span id="size-choice-3-label">M</span>
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="L" class="sr-only"
-                                                        aria-labelledby="size-choice-4-label">
-                                                    <span id="size-choice-4-label">L</span>
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="XL" class="sr-only"
-                                                        aria-labelledby="size-choice-5-label">
-                                                    <span id="size-choice-5-label">XL</span>
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="XXL" class="sr-only"
-                                                        aria-labelledby="size-choice-6-label">
-                                                    <span id="size-choice-6-label">XXL</span>
-
-                                                    <span class="absolute rounded-md pointer-events-none -inset-px"
-                                                        aria-hidden="true"></span>
-                                                </label>
-                                                <label
-                                                    class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-200 uppercase transition duration-300 ease-in-out border rounded-md cursor-not-allowed active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1 bg-gray-50">
-                                                    <input type="radio" name="size-choice" id="size-choice"
-                                                        value="XXXL" disabled class="sr-only"
-                                                        aria-labelledby="size-choice-7-label">
-                                                    <span id="size-choice-7-label">XXXL</span>
-                                                    <span aria-hidden="true"
-                                                        class="absolute border-2 border-gray-200 rounded-md pointer-events-none -inset-px">
-                                                        <svg class="absolute inset-0 w-full h-full text-gray-200 stroke-2"
-                                                            viewBox="0 0 100 100" preserveAspectRatio="none"
-                                                            stroke="currentColor">
-                                                            <line x1="0" y1="100" x2="100"
-                                                                y2="0" vector-effect="non-scaling-stroke" />
-                                                        </svg>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-
-                                </div>
                             </div>
 
 
@@ -344,16 +251,20 @@
                                         <p class="text-sm text-gray-400">Online 31 phút trước</p>
                                     </div>
                                     <div class="col-span-1">
-                                        <a href="/" class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                                            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                                        <a href="/"
+                                            class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                                            <span
+                                                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                                 Nhắn tin
                                             </span>
-                                          </a>
-                                        <a href="/" class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
-                                            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                                        </a>
+                                        <a href="/"
+                                            class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+                                            <span
+                                                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                                 Xem shop
                                             </span>
-                                          </a>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -388,7 +299,7 @@
                                 <div>
                                     <p class="text-sm text-red-600">46k</p>
                                 </div>
-                              </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -399,7 +310,11 @@
     <div class="container mx-auto">
         <div class="product-featured">
             <div class="showcase-container">
-                <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Thông tin <span class="underline underline-offset-3 decoration-8 decoration-blue-400 dark:decoration-blue-600">Sản phẩm</span></h1>
+                <h1
+                    class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                    Thông tin <span
+                        class="underline underline-offset-3 decoration-8 decoration-blue-400 dark:decoration-blue-600">Sản
+                        phẩm</span></h1>
                 {!! $product->describes !!}
             </div>
         </div>

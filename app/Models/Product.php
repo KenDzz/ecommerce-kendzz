@@ -28,6 +28,7 @@ class Product extends Model
         'purchases'
     ];
 
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
@@ -35,6 +36,10 @@ class Product extends Model
 
     public function productMedia(){
         return $this->hasMany(ProductMedia::class, 'product_id');
+    }
+
+    public function productType(){
+        return $this->hasMany(ProductType::class, 'product_id');
     }
 
     public static function boot()
