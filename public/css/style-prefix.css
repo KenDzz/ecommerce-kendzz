@@ -1005,6 +1005,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   z-index: 20;
 }
 
+.dropdown-menu:hover .dropdown-menu-user {
+    display: block;
+}
+
 .sidebar.active {
   left: 0;
   visibility: visible;
