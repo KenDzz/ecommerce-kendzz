@@ -90,7 +90,7 @@
                     @php
                         $user = Auth::user();
                         $name = $user->name;
-                        $displayedName = "Hi, ". strlen($name) > 6 ? substr($name, 0, 10) . '...' : $name;
+                        $displayedName = "Hi, ". strlen($name) > 10 ? substr($name, 0, 10) . '...' : $name;
                     @endphp
                       <div class="dropdown-menu">
                           <button id="dropdownAvatarNameButton"
@@ -112,11 +112,11 @@
 
                               <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                   <div class="font-medium ">{{ Auth::user()->name }}</div>
-                                  <div class="truncate">Thành viên V.I.P</div>
+                                  <div class="truncate">Số dư: {{ number_format( Auth::user()->money, 0, ',', '.') . ' đ' }}</div>
                               </div>
                               <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                   <li>
-                                      <a href="#"
+                                      <a href="{{ route('user-info') }}"
                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Hồ
                                           sơ</a>
                                   </li>

@@ -1009,6 +1009,18 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
     display: block;
 }
 
+.active-card-recharge{
+    border-color: var(--salmon-pink) !important;
+}
+
+.card-recharge:hover{
+    border-color: var(--salmon-pink);
+
+}
+
+
+
+
 .sidebar.active {
   left: 0;
   visibility: visible;
@@ -2189,9 +2201,9 @@ footer {
     outline: none !important;
   }
 
-  .active {
-        background-color: var(--salmon-pink) !important; /* Màu nền khi nút được chọn */
-        color: #ffffff !important; * Màu chữ khi nút được chọn */
+  .active-choose {
+        background-color: var(--salmon-pink) !important;
+        color: #ffffff !important;
     }
 
 

@@ -1,14 +1,16 @@
+Notiflix.Notify.init({
+    position: 'right-bottom'
+});
+
 $(document).ready(function () {
+
     // Sử dụng event delegation cho các nút size-choice
     $(document).on("change","input[type=radio][name=size-choice]",
         function () {
-            // Xóa lớp CSS 'active' từ tất cả các nút kích thước
-            $(".choose-size label").removeClass("active");
-
-            // Thêm lớp CSS 'active' vào nút kích thước đã chọn
+            $(".choose-size label").removeClass("active-choose");
             if ($(this).is(":checked")) {
                 console.log("size-choice" + $(this).val());
-                $(this).closest(".choose-size label").addClass("active");
+                $(this).closest(".choose-size label").addClass("active-choose");
             }
         }
     );
@@ -19,13 +21,10 @@ $(document).ready(function () {
 );
 
     $("input[type=radio][name=category-choice]").change(function () {
-        // Xóa lớp CSS 'active' từ tất cả các nút kích thước
-        $(".choose-category label").removeClass("active");
-
-        // Thêm lớp CSS 'active' vào nút kích thước đã chọn
+        $(".choose-category label").removeClass("active-choose");
         if ($(this).is(":checked")) {
             console.log($(this).val());
-            $(this).closest(".choose-category label").addClass("active");
+            $(this).closest(".choose-category label").addClass("active-choose");
             if ($(this).val() != null && $(this).val() > 0) {
                 getsize($(this).val());
             }
@@ -197,7 +196,112 @@ $(document).ready(function () {
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
+
+
+    $('.radio-input-recharge').change(function() {
+        $('.radio-label-recharge').removeClass('active-card-recharge');
+        if ($(this).is(':checked')) {
+            $("#selectedMoney").val($(this).val());
+            $(this).next('.radio-label-recharge').addClass('active-card-recharge');
+            console.log($(this).val());
+            showInfoRecharge();
+        }
+    });
+
+    $('.card-recharge').on('click', function() {
+        $('.card-recharge').removeClass('active-card-recharge');
+        $(this).addClass('active-card-recharge');
+        $('#selectedCard').val($(this).find('span').text().trim());
+        console.log($(this).find('span').text().trim());
+        showInfoRecharge();
+    });
+
+    function showInfoRecharge() {
+        var bankCode = $('#selectedCard').val();
+        var moneySelect = $('#selectedMoney').val();
+        if(bankCode == ""){
+            Notiflix.Notify.failure(
+                "Vui lòng chọn hình thức thanh toán!"
+            );
+            return;
+        }
+        if(moneySelect == ""){
+            Notiflix.Notify.failure(
+                "Vui lòng chọn mệnh giá tiền!"
+            );
+            return;
+        }
+        var formatMoney = parseInt(moneySelect, 10);
+        var moneySelectFormat = formatMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        $('.form-info-recharge').removeClass('hidden');
+        $('.form-sussces-recharge').addClass('hidden');
+        $.ajax({
+            url: "/user/info/recharge",
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                code: bankCode,
+                amount: formatMoney,
+            },
+            beforeSend: function () {
+                Notiflix.Block.standard(".form-info-recharge");
+            },
+            complete: function () {
+                Notiflix.Block.remove(".form-info-recharge");
+            },
+        })
+            .done(function (data) {
+                $('.text-money').html(moneySelectFormat);
+                $('.text-bank').html(bankCode);
+                $(".qr-pay-img").attr("src",data.redirectLink);
+                $(".text-name-bank-transfer").html(data.bankname);
+                $(".text-content-bank-transfer").html(data.content);
+                $("#tranid").val(data.tranid);
+                checkQR();
+                console.log(data);
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
+    function checkQR() {
+        $.ajax({
+            url: 'qrpay/check',
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                id: $("#tranid").val(),
+            },
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.code == 9){
+                    $('.form-info-recharge').addClass('hidden');
+                    $('.form-sussces-recharge').removeClass('hidden');
+                }else{
+                    setTimeout(checkQR, 30000);
+                }
+            },
+            error: function(xhr, status, error) {
+            }
+        });
+    }
+
+    // Gọi hàm runAjax() để bắt đầu quá trình
+    runAjax();
+
+
 });
+
+
 
 const cartButton = document.querySelector('.action-btn.btn-cart');
 const cartSlideOver = document.querySelector('.form-cart');

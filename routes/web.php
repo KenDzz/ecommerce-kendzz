@@ -23,11 +23,19 @@ Route::get('/', [HomeController::class, 'index'])->middleware('is_verify_email')
 Route::get('/category/{id}', [ProductController::class, 'categoryProduct'])->middleware('is_verify_email')->name('category-product');
 Route::get('/product-{id}/{slug}', [ProductController::class, 'detailProduct'])->middleware('is_verify_email')->name('detail-product');
 Route::post('/getsize', [ProductController::class, 'getSize'])->middleware('is_verify_email')->name('get-size');
-Route::post('add-to-cart', [ProductController::class, 'addToCart'])->name('add.to.cart');
-Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('update.cart');
-Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove.from.cart');
-Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('remove.from.cart');
+Route::post('add-to-cart', [ProductController::class, 'addToCart'])->name('add-to-cart');
+Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('update-cart');
+Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove-from-cart');
+Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('reload-cart');
 
+
+Route::prefix('user')->middleware('auth')->name('user')->group(function () {
+    Route::get('/', [UserController::class, 'infoUser'])->name('-info');
+    Route::get('recharge', [UserController::class, 'recharge'])->name('-recharge');
+    Route::post('info/recharge', [UserController::class, 'getInfoQRPay'])->name('-info-recharge');
+    Route::post('qrpay/check', [UserController::class, 'checkqrpay'])->name('-qrpay-check');
+
+});
 Route::prefix('auth')->name('auth')->group(function () {
     Route::get('/', [AuthenticationController::class, 'index'])->name('-login');
     Route::get('/register', [AuthenticationController::class, 'register'])->name('-register');
