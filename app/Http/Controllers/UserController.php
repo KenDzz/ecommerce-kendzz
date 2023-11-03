@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserRecharge;
 use App\Models\UserVerify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,16 @@ class UserController extends Controller
         $this->userVerify = new UserVerifyController();
         $this->mail = new EmailController();
     }
+
+
+    public function addMoney($money){
+        $user = User::find(Auth::user()->id);
+        if(is_numeric($money) && $money > 0){
+            $user->money += $money;
+            $user->save();
+        }
+    }
+
 
     public function addUser(Request $request) {
         $checkUser = $request->validate([
@@ -77,6 +88,13 @@ class UserController extends Controller
         curl_close($ch);
         $resp = json_decode($output,true);
         $resp['tranid'] = $tran_id;
+        $userProject = new UserRecharge();
+        $userProject->user_id = Auth::user()->id;
+        $userProject->trans_id = $tran_id;
+        $userProject->amount = $checkInfo['amount'];
+        $userProject->message = $message;
+        $userProject->bank_code = $checkInfo['code'];
+        $userProject->save();
         return response()->json($resp);
 
     }
@@ -93,6 +111,16 @@ class UserController extends Controller
         curl_close($ch);
         $resp = json_decode($output,true);
         $filteredData = collect($resp)->only(['amount', 'code', 'message'])->toArray();
+        $UserRecharge = UserRecharge::where('trans_id', $checkInfo['id'])->first();
+        if($UserRecharge){
+            $UserRecharge->code = $resp['code'];
+            $UserRecharge->message_callback = $resp['message'];
+            $UserRecharge->save();
+            if($resp['code'] == 9){
+                $this->addMoney($resp['amount']);
+            }
+       }
+
         return response()->json($filteredData);
     }
 
