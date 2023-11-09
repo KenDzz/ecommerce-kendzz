@@ -31,9 +31,17 @@ Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('reloa
 
 Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('/', [UserController::class, 'infoUser'])->name('-info');
+
+
+    //Start Router QR PAY
     Route::get('recharge', [UserController::class, 'recharge'])->name('-recharge');
     Route::post('info/recharge', [UserController::class, 'getInfoQRPay'])->name('-info-recharge');
     Route::post('qrpay/check', [UserController::class, 'checkqrpay'])->name('-qrpay-check');
+    //End Router QR PAY
+
+    // Start Router Shipping Address
+    Route::get('shipping/addresses', [UserController::class, 'shippingaddresses'])->name('-shipping-addresses');
+    Route::get('shipping/addresses/{search}/{state}/{city}/{district}', [UserController::class, 'getApiAddress'])->name('-api-addresses');
 
 });
 Route::prefix('auth')->name('auth')->group(function () {

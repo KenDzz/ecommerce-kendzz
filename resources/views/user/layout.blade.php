@@ -23,14 +23,14 @@
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 bg-muted hover:bg-gray-200"
                                 href="/examples/forms/account">Bảo mật</a>
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200 "
-                                href="/examples/forms/appearance">Địa chỉ giao hàng</a>
+                                href="{{ route('user-shipping-addresses') }}">Địa chỉ giao hàng</a>
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200 "
                                 href="{{ route('user-recharge') }}">Nạp tiền</a>
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200 "
                                 href="/examples/forms/display">Cài đặt tài khoản</a>
                         </nav>
 
-                        <div class="flex-1 lg:max-w-2xl">
+                        <div class="flex-auto">
                             <!-- About Page Content -->
                             @yield('content-user')
                         </div>

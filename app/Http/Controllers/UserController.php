@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserRecharge;
+use App\Models\UsersShippingAddresses;
 use App\Models\UserVerify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -122,6 +123,30 @@ class UserController extends Controller
        }
 
         return response()->json($filteredData);
+    }
+
+    public function getApiAddress($search,$state,$city,$district){
+        $data = [];
+        $url = env('API_SPX')."?input=".$search."&country=VN&state=".rawurlencode($state)."&city=".rawurlencode($city)."&district=".rawurlencode($district);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $resp = json_decode($output,true);
+        if($resp != null){
+            foreach($resp['data'] as $values)
+            {
+                $data[] = $values['main_text'].", ".$values['secondary_text'];
+            }
+        }
+        return response()->json($data);
+    }
+
+    public function shippingaddresses(){
+        $user_id = auth()->user()->id;
+        $shippingaddresses = UsersShippingAddresses::where('user_id',$user_id)->get();
+        return view("user.addresses", ['datas' => $shippingaddresses]);
     }
 
 }

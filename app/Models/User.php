@@ -47,4 +47,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function userAddress() {
+        return $this->hasMany(UsersShippingAddresses::class, 'user_id');
+    }
 }

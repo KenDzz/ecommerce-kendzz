@@ -1,11 +1,12 @@
 Notiflix.Notify.init({
-    position: 'right-bottom'
+    position: "right-bottom",
 });
 
 $(document).ready(function () {
-
     // Sử dụng event delegation cho các nút size-choice
-    $(document).on("change","input[type=radio][name=size-choice]",
+    $(document).on(
+        "change",
+        "input[type=radio][name=size-choice]",
         function () {
             $(".choose-size label").removeClass("active-choose");
             if ($(this).is(":checked")) {
@@ -15,10 +16,21 @@ $(document).ready(function () {
         }
     );
 
-    $(document).on("click",".btn-delete-product-cart",function () {
-        removeCart($('.li-product-cart').attr('data-id'));
-    }
-);
+    $(document).on("click", ".btn-delete-product-cart", function () {
+        removeCart($(".li-product-cart").attr("data-id"));
+    });
+
+    $("#btn-modal-add-address").click(function () {
+        $("#address-modal").toggleClass("hidden");
+        var selectElement = $("#province-modal-address");
+        if (selectElement.children().length < 2) {
+            getProvince();
+        }
+    });
+
+    $("#btn-close-modal-address").click(function () {
+        $("#address-modal").toggleClass("hidden");
+    });
 
     $("input[type=radio][name=category-choice]").change(function () {
         $(".choose-category label").removeClass("active-choose");
@@ -31,32 +43,85 @@ $(document).ready(function () {
         }
     });
 
-    $(".btn-add-product-to-cart").on("click", function() {
-        var id = $('.product-content').attr('productId');
-        var quantity = $('.custom-input-number-product').val();
-        var size = $('input[type=radio][name=size-choice]:checked').val();
-        var category = $('input[type=radio][name=category-choice]:checked').val();
-        if(quantity < 1){
-            Notiflix.Notify.failure(
-                "Số lượng sản phẩm phải lớn hơn 0"
-            );
+    $(document).on("change", "#province-modal-address", function () {
+        var element = $(this).find("option:selected");
+        var code = element.attr("attr-code");
+        getCity(code);
+    });
+
+    $(document).on("change", "#city-modal-address", function () {
+        var element = $(this).find("option:selected");
+        var code = element.attr("attr-code");
+        getDistrict(code);
+    });
+
+    $('#price').on('keydown', function() {
+        var price = $(this).val();
+        var newPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        $(this).val(newPrice);
+    });
+
+    const autoCompleteJS = new autoComplete({
+        placeHolder: "Nhập địa chỉ",
+        data: {
+            src: async (query) => {
+                try {
+                    const province = $("#province-modal-address option:selected").val();
+                    const city = $("#city-modal-address option:selected").val();
+                    const district = $("#district-modal-address option:selected").val();
+                    if ((province && province != null) && (city && city != null) && (district && district != null)) {
+                        const source = await fetch(
+                            `/user/shipping/addresses/${query}/${province}/${city}/${district}`
+                        );
+                        const dataRes = await source.json();
+                        return dataRes;
+                    }
+                } catch (error) {
+                    return error;
+                }
+            },
+            cache: false,
+        },
+        resultItem: {
+            highlight: true,
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value;
+                    autoCompleteJS.input.value = selection;
+                    console.log("selection!");
+
+                },
+                focus: (event) => {
+                    console.log("Input Field in focus!");
+                  }
+            },
+        },
+    });
+
+    $(".btn-add-product-to-cart").on("click", function () {
+        var id = $(".product-content").attr("productId");
+        var quantity = $(".custom-input-number-product").val();
+        var size = $("input[type=radio][name=size-choice]:checked").val();
+        var category = $(
+            "input[type=radio][name=category-choice]:checked"
+        ).val();
+        if (quantity < 1) {
+            Notiflix.Notify.failure("Số lượng sản phẩm phải lớn hơn 0");
             return;
         }
 
-        if($('.choose-category').length > 0 && category == null){
-            Notiflix.Notify.failure(
-                "Vui lòng chọn loại sản phẩm!"
-            );
+        if ($(".choose-category").length > 0 && category == null) {
+            Notiflix.Notify.failure("Vui lòng chọn loại sản phẩm!");
             return;
         }
 
-        if($('.list-product-size').length > 0 && size == null){
-            Notiflix.Notify.failure(
-                "Vui lòng kích cở sản phẩm!"
-            );
+        if ($(".list-product-size").length > 0 && size == null) {
+            Notiflix.Notify.failure("Vui lòng kích cở sản phẩm!");
             return;
         }
-        addCart(id,quantity,category,size);
+        addCart(id, quantity, category, size);
     });
 
     function reloadCart() {
@@ -67,31 +132,51 @@ $(document).ready(function () {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            beforeSend: function () {
-            },
-            complete: function () {
-            },
+            beforeSend: function () {},
+            complete: function () {},
         })
-        .done(function (data) {
-            $(".list-product-cart").html("");
-            var data = data["cart"];
-            var totalPrice = 0;
-            $.each(data, function(i, item) {
-                var price = data[i].quantity * data[i].price;
-                totalPrice += price;
-                var totalPriceFormat = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-                var htmlSize = "";
-                if(data[i].size != null){
-                    htmlSize += ","+data[i].size;
-                }
-                $(".list-product-cart").append('<li class="flex py-6 li-product-cart" data-id="'+i+'"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="/'+data[i].image+'" alt="" class="object-cover object-center w-full h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="#">'+data[i].name+'</a></h3><p class="ml-4">'+totalPriceFormat+'</p></div><p class="mt-1 text-sm text-gray-500">'+data[i].category+' '+htmlSize+' </p></div><div class="flex items-end justify-between flex-1 text-sm"><p class="text-gray-500">'+data[i].quantity+'</p><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-cart">Xóa</button></div></div></div></li>');
+            .done(function (data) {
+                $(".list-product-cart").html("");
+                var data = data["cart"];
+                var totalPrice = 0;
+                $.each(data, function (i, item) {
+                    var price = data[i].quantity * data[i].price;
+                    totalPrice += price;
+                    var totalPriceFormat = price.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                    });
+                    var htmlSize = "";
+                    if (data[i].size != null) {
+                        htmlSize += "," + data[i].size;
+                    }
+                    $(".list-product-cart").append(
+                        '<li class="flex py-6 li-product-cart" data-id="' +
+                            i +
+                            '"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="/' +
+                            data[i].image +
+                            '" alt="" class="object-cover object-center w-full h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="#">' +
+                            data[i].name +
+                            '</a></h3><p class="ml-4">' +
+                            totalPriceFormat +
+                            '</p></div><p class="mt-1 text-sm text-gray-500">' +
+                            data[i].category +
+                            " " +
+                            htmlSize +
+                            ' </p></div><div class="flex items-end justify-between flex-1 text-sm"><p class="text-gray-500">' +
+                            data[i].quantity +
+                            '</p><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-cart">Xóa</button></div></div></div></li>'
+                    );
+                });
+                $(".total-price-cart").html(
+                    totalPrice.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                    })
+                );
+                $(".count-cart").html(Object.keys(data).length);
             })
-            $(".total-price-cart").html(totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
-            $(".count-cart").html(Object.keys(data).length);
-        })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {
-        });
-
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
     function removeCart(id) {
@@ -105,22 +190,18 @@ $(document).ready(function () {
             data: {
                 id: id,
             },
-            beforeSend: function () {
-            },
-            complete: function () {
-            },
+            beforeSend: function () {},
+            complete: function () {},
         })
-        .done(function (data) {
-            if(data["status"] == true){
-                reloadCart();
-            }
-        })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {
-        });
-
+            .done(function (data) {
+                if (data["status"] == true) {
+                    reloadCart();
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-    function addCart(id,quantity,category,size) {
+    function addCart(id, quantity, category, size) {
         $.ajax({
             url: "/add-to-cart",
             method: "post",
@@ -132,7 +213,7 @@ $(document).ready(function () {
                 id: id,
                 quantity: quantity,
                 category: category,
-                size: size
+                size: size,
             },
             beforeSend: function () {
                 Notiflix.Loading.standard();
@@ -141,15 +222,12 @@ $(document).ready(function () {
                 Notiflix.Loading.remove();
             },
         })
-        .done(function (data) {
-            if(data["status"] == true){
-                reloadCart();
-            }
-        })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {
-
-        });
-
+            .done(function (data) {
+                if (data["status"] == true) {
+                    reloadCart();
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
     function getsize(id) {
@@ -197,44 +275,44 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-
-    $('.radio-input-recharge').change(function() {
-        $('.radio-label-recharge').removeClass('active-card-recharge');
-        if ($(this).is(':checked')) {
+    $(".radio-input-recharge").change(function () {
+        $(".radio-label-recharge").removeClass("active-card-recharge");
+        if ($(this).is(":checked")) {
             $("#selectedMoney").val($(this).val());
-            $(this).next('.radio-label-recharge').addClass('active-card-recharge');
+            $(this)
+                .next(".radio-label-recharge")
+                .addClass("active-card-recharge");
             console.log($(this).val());
             showInfoRecharge();
         }
     });
 
-    $('.card-recharge').on('click', function() {
-        $('.card-recharge').removeClass('active-card-recharge');
-        $(this).addClass('active-card-recharge');
-        $('#selectedCard').val($(this).find('span').text().trim());
-        console.log($(this).find('span').text().trim());
+    $(".card-recharge").on("click", function () {
+        $(".card-recharge").removeClass("active-card-recharge");
+        $(this).addClass("active-card-recharge");
+        $("#selectedCard").val($(this).find("span").text().trim());
+        console.log($(this).find("span").text().trim());
         showInfoRecharge();
     });
 
     function showInfoRecharge() {
-        var bankCode = $('#selectedCard').val();
-        var moneySelect = $('#selectedMoney').val();
-        if(bankCode == ""){
-            Notiflix.Notify.failure(
-                "Vui lòng chọn hình thức thanh toán!"
-            );
+        var bankCode = $("#selectedCard").val();
+        var moneySelect = $("#selectedMoney").val();
+        if (bankCode == "") {
+            Notiflix.Notify.failure("Vui lòng chọn hình thức thanh toán!");
             return;
         }
-        if(moneySelect == ""){
-            Notiflix.Notify.failure(
-                "Vui lòng chọn mệnh giá tiền!"
-            );
+        if (moneySelect == "") {
+            Notiflix.Notify.failure("Vui lòng chọn mệnh giá tiền!");
             return;
         }
         var formatMoney = parseInt(moneySelect, 10);
-        var moneySelectFormat = formatMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-        $('.form-info-recharge').removeClass('hidden');
-        $('.form-sussces-recharge').addClass('hidden');
+        var moneySelectFormat = formatMoney.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+        $(".form-info-recharge").removeClass("hidden");
+        $(".form-sussces-recharge").addClass("hidden");
         $.ajax({
             url: "/user/info/recharge",
             method: "post",
@@ -254,9 +332,9 @@ $(document).ready(function () {
             },
         })
             .done(function (data) {
-                $('.text-money').html(moneySelectFormat);
-                $('.text-bank').html(bankCode);
-                $(".qr-pay-img").attr("src",data.redirectLink);
+                $(".text-money").html(moneySelectFormat);
+                $(".text-bank").html(bankCode);
+                $(".qr-pay-img").attr("src", data.redirectLink);
                 $(".text-name-bank-transfer").html(data.bankname);
                 $(".text-content-bank-transfer").html(data.content);
                 $("#tranid").val(data.tranid);
@@ -268,7 +346,7 @@ $(document).ready(function () {
 
     function checkQR() {
         $.ajax({
-            url: 'qrpay/check',
+            url: "qrpay/check",
             method: "post",
             dataType: "json",
             headers: {
@@ -277,21 +355,18 @@ $(document).ready(function () {
             data: {
                 id: $("#tranid").val(),
             },
-            beforeSend: function () {
-            },
-            complete: function () {
-            },
-            success: function(data) {
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
                 console.log(data);
-                if(data.code == 9){
-                    $('.form-info-recharge').addClass('hidden');
-                    $('.form-sussces-recharge').removeClass('hidden');
-                }else{
+                if (data.code == 9) {
+                    $(".form-info-recharge").addClass("hidden");
+                    $(".form-sussces-recharge").removeClass("hidden");
+                } else {
                     setTimeout(checkQR, 30000);
                 }
             },
-            error: function(xhr, status, error) {
-            }
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -299,20 +374,140 @@ $(document).ready(function () {
     runAjax();
 
 
+    var TomSelectProvince;
+    var TomSelectCity;
+    var TomSelectDistrict;
+    //Search Select
+    function getProvince() {
+        $.ajax({
+            url: "https://provinces.open-api.vn/api/?depth=1",
+            method: "get",
+            dataType: "json",
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                $("#province-modal-address").html("");
+                data.forEach((element) => {
+                    var name = element.name.replace("Tỉnh ", "").replace("Thành phố ", "");
+                    $("#province-modal-address").append(
+                        '<option value="' +
+                            name +
+                            '" attr-code="' +
+                            element.code +
+                            '">' +
+                            name +
+                            "</option>"
+                    );
+                });
+                if(TomSelectProvince){
+                    TomSelectProvince.clear(); // unselect previously selected elements
+                    TomSelectProvince.clearOptions(); // remove existing options
+                    TomSelectProvince.sync(); // synchronise with the underlying SELECT
+                }else{
+                    TomSelectProvince =  new TomSelect("#province-modal-address", {
+                        create: true,
+                        sortField: {
+                            field: "text",
+                            direction: "asc",
+                        },
+                    });
+                }
+
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
+    function getCity(code) {
+        $.ajax({
+            url: "https://provinces.open-api.vn/api/p/" + code + "?depth=2",
+            method: "get",
+            dataType: "json",
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                const districts = data.districts;
+                $("#city-modal-address").html("");
+                districts.forEach((element) => {
+                    $("#city-modal-address").append(
+                        '<option value="' +
+                            element.name +
+                            '" attr-code="' +
+                            element.code +
+                            '">' +
+                            element.name +
+                            "</option>"
+                    );
+                });
+                if(TomSelectCity){
+                    TomSelectCity.clear(); // unselect previously selected elements
+                    TomSelectCity.clearOptions(); // remove existing options
+                    TomSelectCity.sync(); // synchronise with the underlying SELECT
+                }else{
+                    TomSelectCity =  new TomSelect("#city-modal-address", {
+                        create: true,
+                        sortField: {
+                            field: "text",
+                            direction: "asc",
+                        },
+                    });
+                }
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
+    function getDistrict(code) {
+        $.ajax({
+            url: "https://provinces.open-api.vn/api/d/" + code + "?depth=2",
+            method: "get",
+            dataType: "json",
+            beforeSend: function () {},
+            complete: function () {},
+            success: function (data) {
+                const wards = data.wards;
+                $("#district-modal-address").html("");
+                wards.forEach((element) => {
+                    $("#district-modal-address").append(
+                        '<option value="' +
+                            element.name +
+                            '" attr-code="' +
+                            element.code +
+                            '">' +
+                            element.name +
+                            "</option>"
+                    );
+                });
+                if(TomSelectDistrict){
+                    TomSelectDistrict.clear(); // unselect previously selected elements
+                    TomSelectDistrict.clearOptions(); // remove existing options
+                    TomSelectDistrict.sync(); // synchronise with the underlying SELECT
+                }else{
+                    TomSelectDistrict =  new TomSelect("#district-modal-address", {
+                        create: true,
+                        sortField: {
+                            field: "text",
+                            direction: "asc",
+                        },
+                    });
+                }
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
 });
 
+const cartButton = document.querySelector(".action-btn.btn-cart");
+const cartSlideOver = document.querySelector(".form-cart");
+const closeCart = document.querySelector(".btn-hidden-cart");
 
-
-const cartButton = document.querySelector('.action-btn.btn-cart');
-const cartSlideOver = document.querySelector('.form-cart');
-const closeCart = document.querySelector('.btn-hidden-cart');
-
-cartButton.addEventListener('click', () => {
-  cartSlideOver.classList.toggle('hidden');
+cartButton.addEventListener("click", () => {
+    cartSlideOver.classList.toggle("hidden");
 });
 
-closeCart.addEventListener('click', () => {
-    cartSlideOver.classList.toggle('hidden');
+closeCart.addEventListener("click", () => {
+    cartSlideOver.classList.toggle("hidden");
 });
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="{{ url('css/style-prefix.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="{{url('css/notiflix-3.2.6.min.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 
   <!--
     - google font link
@@ -141,10 +142,13 @@
   -->
   <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
   <script src="{{url('js/notiflix-3.2.6.min.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 
   <script src="{{ url('js/script.js') }}"></script>
   <script src="{{ url('js/product.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
   <!--
     - ionicon link
   -->

@@ -17,7 +17,7 @@
     </div>
     <input type="hidden" id="selectedCard" value="">
     <input type="hidden" id="selectedMoney" value="">
-    <div class="flex mt-5 space-x-4 overflow-x-auto ">
+    <div class="flex mt-5 space-x-4 overflow-x-auto lg:max-w-3xl ">
         <div class="flex-auto cursor-pointer">
             <input id="recharge-10" type="radio" name="price" class="hidden radio-input-recharge" value="10000">
             <label for="recharge-10"
@@ -148,16 +148,16 @@
     </div>
 
     <div class="hidden form-sussces-recharge">
-            <div class="p-6 bg-white md:mx-auto">
-              <svg viewBox="0 0 24 24" class="w-16 h-16 mx-auto my-6 text-green-600">
-                  <path fill="currentColor"
-                      d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z">
-                  </path>
-              </svg>
-              <div class="text-center">
-                  <h3 class="text-base font-semibold text-center text-gray-900 md:text-2xl">Giao dịch thành công!</h3>
-                  <p class="my-2 text-gray-600">Cảm ơn bạn đã hoàn tất thanh toán trực tuyến an toàn của mình.</p>
-              </div>
-          </div>
+        <div class="p-6 bg-white md:mx-auto">
+            <svg viewBox="0 0 24 24" class="w-16 h-16 mx-auto my-6 text-green-600">
+                <path fill="currentColor"
+                    d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z">
+                </path>
+            </svg>
+            <div class="text-center">
+                <h3 class="text-base font-semibold text-center text-gray-900 md:text-2xl">Giao dịch thành công!</h3>
+                <p class="my-2 text-gray-600">Cảm ơn bạn đã hoàn tất thanh toán trực tuyến an toàn của mình.</p>
+            </div>
+        </div>
     </div>
 @endsection
