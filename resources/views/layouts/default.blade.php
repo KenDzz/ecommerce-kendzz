@@ -26,9 +26,9 @@
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
 
 <body>
@@ -137,11 +137,14 @@
 
   @include('layouts.footer')
 
+
+</body>
+
   <!--
     - custom js link
   -->
   <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
-  <script src="{{url('js/notiflix-3.2.6.min.js')}}"></script>
+  <script src="{{ url('js/notiflix-3.2.6.min.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 
@@ -154,7 +157,4 @@
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></scrip>
-
-</body>
-
 </html>

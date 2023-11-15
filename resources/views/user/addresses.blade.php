@@ -29,7 +29,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="tbody-shipping-adress">
                 @if (!$datas->isEmpty() && $datas->count() > 0)
                     @foreach ($datas as $data)
                         <tr
@@ -52,9 +52,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 <label class="relative inline-flex items-center cursor-pointer">
-
-                                    <input type="checkbox" value="" class="sr-only peer"
-                                        {{ $data->is_used ? 'checked' : '' }}>
+                                    <input type="checkbox" value="" attr-id="{{ $data->id }}" class="sr-only peer checkbox-shipping-address" {{ $data->is_used ? 'checked' : '' }}>
                                     <div
                                         class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-pink-600">
                                     </div>
@@ -70,7 +68,7 @@
     </div>
     <!-- Main modal -->
 <div id="address-modal" tabindex="-1" aria-hidden="true" class="flex justify-center items-center bg-gray-500 bg-opacity-75 fixed top-0 left-0 right-0 z-10 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full">
-    <div class="relative w-full max-w-md max-h-full">
+    <div class="relative w-full max-w-md max-h-full modal-add-address">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <button type="button" id="btn-close-modal-address" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
@@ -81,7 +79,7 @@
             </button>
             <div class="px-6 py-6 lg:px-8">
                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Thêm địa chỉ mới</h3>
-                <form class="space-y-6" action="#">
+                <form class="space-y-6 form-add-address" action="#" onsubmit="return false">
                     <div>
                         <label for="name-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên <span class="text-red-600">*</span></label>
                         <input type="text" id="name-modal-address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
@@ -96,24 +94,24 @@
                         </div>
                     </div>
                     <div>
-                        <label for="province-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tỉnh</label>
+                        <label for="province-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tỉnh <span class="text-red-600">*</span></label>
                         <select id="province-modal-address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chọn Tỉnh" autocomplete="off">
                         </select>
                     </div>
                     <div>
-                        <label for="city-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quận/Huyện</label>
+                        <label for="city-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quận/Huyện <span class="text-red-600">*</span></label>
                         <select id="city-modal-address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chọn Quận/Huyện" autocomplete="off">
 
                         </select>
                     </div>
                     <div>
-                        <label for="district-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phường/Xã</label>
+                        <label for="district-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phường/Xã <span class="text-red-600">*</span></label>
                         <select id="district-modal-address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chọn Phường/Xã" autocomplete="off">
                         </select>
                     </div>
                     <div>
-                        <label for="info-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Địa chỉ</label>
-                        <input id="autoComplete" class="bg-gray-50 border name-modal-address border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
+                        <label for="info-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Địa chỉ <span class="text-red-600">*</span></label>
+                        <input id="autoComplete" class="bg-gray-50 border info-modal-address border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
                     </div>
                     <div>
                         <label for="note-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lưu ý</label>
@@ -123,7 +121,7 @@
                         <label for="postal-modal-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Postal Code</label>
                         <input type="text" id="postal-modal-address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                     </div>
-                    <button class="w-full add-cart-btn">Thêm địa chỉ mới</button>
+                    <button type="button" class="w-full add-cart-btn btn-add-address">Thêm địa chỉ mới</button>
                 </form>
             </div>
         </div>

@@ -110,7 +110,7 @@
                             </div>
                             <p class="mt-0.5 text-sm text-gray-500">Vận chuyển và thuế được tính khi thanh toán.</p>
                             <div class="mt-6">
-                                <a href="#"
+                                <a href="{{ route('user-checkout') }}"
                                     class="flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700">Thanh
                                     Toán</a>
                             </div>

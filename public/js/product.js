@@ -43,6 +43,31 @@ $(document).ready(function () {
         }
     });
 
+    $(".btn-add-address").click(function () {
+        var name = $('#name-modal-address').val();
+        var phone = $('#phone-modal-address').val();
+        var province = $('#province-modal-address').val();
+        var city = $('#city-modal-address').val();
+        var district = $('#district-modal-address').val();
+        var address = $('.info-modal-address').val();
+        var postalcode = $('#postal-modal-address').val();
+        var note = $('#note-modal-address').val();
+        if(checkAddAdress(name,phone,province,city,district,address)){
+            addAdress(name,phone,province,city,district,address,postalcode,note);
+        }else{
+            Notiflix.Notify.failure("Vui lòng đầy đủ thông tin!");
+        }
+    });
+
+
+    $('.checkbox-shipping-address').on('change', function() {
+        // Handle the change event here
+        $('.checkbox-shipping-address').not(this).prop('checked', false);
+        var isChecked = $(this).prop('checked');
+        console.log('Checkbox state changed: ', isChecked);
+        defaultShipAddress($(this).attr('attr-id'),isChecked)
+    });
+
     $(document).on("change", "#province-modal-address", function () {
         var element = $(this).find("option:selected");
         var code = element.attr("attr-code");
@@ -179,6 +204,33 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
+
+    function name(params) {
+
+    }
+
+
+    function defaultShipAddress(id,status) {
+        status = status ? 1 : 0;
+        $.ajax({
+            url: "/user/shipping/add/addresses/default",
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                id: id,
+                status: status,
+            },
+            beforeSend: function () {},
+            complete: function () {},
+        })
+            .done(function (data) {
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
     function removeCart(id) {
         $.ajax({
             url: "/remove-from-cart",
@@ -199,6 +251,66 @@ $(document).ready(function () {
                 }
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
+    function checkAddAdress(name,phone,province,city,district,address){
+        if(name != null && phone != null && province != null && city != null && district != null && address != null){
+            return true;
+        }
+        return false;
+    }
+
+    function addAdress(name,phone,province,city,district,address,postalcode,note) {
+        $.ajax({
+            url: "/user/shipping/add/addresses",
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                name: name,
+                phone: phone,
+                province: province,
+                city: city,
+                district: district,
+                address: address,
+                postalcode: postalcode,
+                note: note,
+            },
+            beforeSend: function () {
+                Notiflix.Block.standard(".modal-add-address");
+
+            },
+            complete: function () {
+                Notiflix.Block.remove(".modal-add-address");
+
+            },
+        })
+            .done(function (data) {
+                if(data["status"] == true){
+                    loadUiShippingAdress(data['data']);
+                    $('.form-add-address').trigger("reset");
+                    $("#address-modal").toggleClass("hidden");
+                }else{
+                    Notiflix.Notify.failure("Lỗi hệ thống!");
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
+    function loadUiShippingAdress(data){
+        $(".tbody-shipping-adress").html('');
+        data.forEach(element => {
+            var IsUsed = '<div class="h-2.5 w-2.5 rounded-full bg-red-500"></div>';
+            var isChecked = '';
+            if(element['is_used']){
+                var IsUsed = '<div class="h-2.5 w-2.5 rounded-full bg-green-500">';
+                var isChecked = 'checked';
+
+            }
+            $(".tbody-shipping-adress").append('<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"><div class="pl-3"><div class="text-base font-semibold">'+element['name']+'</div><div class="font-normal text-gray-500">+84 '+element['phone']+'</div></div>'+IsUsed+'</th><td class="px-6 py-4">'+element['province']+', '+element['city']+', '+element['district']+'</td><td class="px-6 py-4">'+element['address']+'</td><td class="px-6 py-4"></td><td class="px-6 py-4"><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" value="" attr-id="'+element['id']+'" class="sr-only peer checkbox-shipping-address" '+isChecked+'><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-pink-600"></div></label></td></tr>');
+        });
     }
 
     function addCart(id, quantity, category, size) {

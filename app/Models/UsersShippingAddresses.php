@@ -41,4 +41,8 @@ class UsersShippingAddresses extends Model
 
         return $IsUsed;
     }
+
+    public function getAdress(){
+        return $this->address .', '.$this->district. ', '. $this->city .', '. $this->province;
+    }
 }

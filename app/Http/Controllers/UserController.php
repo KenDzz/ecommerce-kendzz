@@ -14,10 +14,10 @@ class UserController extends Controller
     private $userVerify;
     private $mail;
 
-    public function __construct()
+    public function __construct(UserVerifyController $user, EmailController $email)
     {
-        $this->userVerify = new UserVerifyController();
-        $this->mail = new EmailController();
+        $this->userVerify = $user;
+        $this->mail = $email;
     }
 
 
@@ -148,5 +148,80 @@ class UserController extends Controller
         $shippingaddresses = UsersShippingAddresses::where('user_id',$user_id)->get();
         return view("user.addresses", ['datas' => $shippingaddresses]);
     }
+
+    public function defaultAddress(Request $request){
+        $data['status'] = false;
+        $checkAddress = $request->validate([
+            'id' => ['required',  'numeric'],
+            'status' => ['required', 'boolean'],
+        ]);
+        UsersShippingAddresses::where('user_id', auth()->user()->id)->update(['is_used' => false]);
+        $userShip = UsersShippingAddresses::where('id',$checkAddress['id'])->first();
+        $userShip->is_used = true;
+        if($userShip->save()){
+            $data['status'] = true;
+        }
+        return response()->json($data);
+
+    }
+
+    public function addAddress(Request $request){
+        $data['status'] = false;
+        $checkAddress = $request->validate([
+            'name' => ['required'],
+            'phone' => ['required', 'numeric', 'unique:users'],
+            'province' => ['required'],
+            'city' => ['required'],
+            'district' => ['required'],
+            'address' => ['required'],
+            'postalcode' => [],
+            'note' => [],
+        ]);
+
+
+        $userShip = new UsersShippingAddresses();
+        $userShip->user_id = auth()->user()->id;
+        $userShip->phone = $checkAddress['phone'];
+        $userShip->address = $checkAddress['address'];
+        $userShip->city = $checkAddress['city'];
+        $userShip->province = $checkAddress['province'];
+        $userShip->district = $checkAddress['district'];
+        $userShip->postalcode = $checkAddress['postalcode'];
+        $userShip->name = $checkAddress['name'];
+        $userShip->note = $checkAddress['note'];
+        $userShip->is_used = false;
+        if($userShip->save()){
+            $data['status'] = true;
+            $data['data'] = UsersShippingAddresses::where('user_id', $userShip->user_id)->get();
+        }
+        return response()->json($data);
+
+    }
+
+
+    public function getIDSubLocation($id,$name){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env('API_SUB_LOCATION_SPX').'?country=VN&location_id='.$id.'&sub_level=1',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+        $data = curl_exec($curl);
+        curl_close($curl);
+        $result = 0;
+        $resp = json_decode($data,true);
+        foreach ($resp['data']['sub_location_info'] as $key => $value) {
+            if($value['name'] == $name){
+                $result = $value['location_id'];
+            }
+        }
+        return $result;
+    }
+
 
 }

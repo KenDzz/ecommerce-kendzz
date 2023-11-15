@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserVerifyController;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
     }
 
     /**

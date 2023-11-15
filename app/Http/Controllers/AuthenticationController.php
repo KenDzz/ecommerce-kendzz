@@ -19,11 +19,11 @@ class AuthenticationController extends Controller
 
     private $sms;
 
-    public function __construct()
+    public function __construct(UserVerifyController $userVerifyController, EmailController $mail, SMSController $sms)
     {
-        $this->userVerify = new UserVerifyController();
-        $this->mail = new EmailController();
-        $this->sms = new SMSController();
+        $this->userVerify = $userVerifyController;
+        $this->mail = $mail;
+        $this->sms = $sms;
     }
 
     public function forgotPassword(){

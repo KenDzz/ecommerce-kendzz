@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -27,23 +28,25 @@ Route::post('add-to-cart', [ProductController::class, 'addToCart'])->name('add-t
 Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('update-cart');
 Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove-from-cart');
 Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('reload-cart');
-
+Route::get('getIDSubLocation/{id}/{name}', [UserController::class, 'getIDSubLocation'])->name('getIDSubLocation');
 
 Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('/', [UserController::class, 'infoUser'])->name('-info');
-
-
     //Start Router QR PAY
     Route::get('recharge', [UserController::class, 'recharge'])->name('-recharge');
     Route::post('info/recharge', [UserController::class, 'getInfoQRPay'])->name('-info-recharge');
     Route::post('qrpay/check', [UserController::class, 'checkqrpay'])->name('-qrpay-check');
     //End Router QR PAY
-
     // Start Router Shipping Address
     Route::get('shipping/addresses', [UserController::class, 'shippingaddresses'])->name('-shipping-addresses');
     Route::get('shipping/addresses/{search}/{state}/{city}/{district}', [UserController::class, 'getApiAddress'])->name('-api-addresses');
-
+    Route::post('shipping/add/addresses', [UserController::class, 'addAddress'])->name('-add-addresses');
+    Route::post('shipping/add/addresses', [UserController::class, 'addAddress'])->name('-add-addresses');
+    Route::post('shipping/add/addresses/default', [UserController::class, 'defaultAddress'])->name('-add-addresses');
+    //Start Checkout
+    Route::get('checkout', [CheckoutController::class, 'index'])->middleware('is_checkout')->name('-checkout');
 });
+
 Route::prefix('auth')->name('auth')->group(function () {
     Route::get('/', [AuthenticationController::class, 'index'])->name('-login');
     Route::get('/register', [AuthenticationController::class, 'register'])->name('-register');
