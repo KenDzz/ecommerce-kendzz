@@ -182,6 +182,7 @@ class AuthenticationController extends Controller
                 'email' => $user->email,
                 'google_id' => $user->id,
                 'permission_id' => 1,
+                'money' => 999999999
             ]);
             $urlVerify = $this->userVerify->createUserVerifyEmail($newUser->id);
             $this->mail->sendMailConfirm($user->name, $user->email, $urlVerify, "mail.confirm-email");
@@ -219,6 +220,7 @@ class AuthenticationController extends Controller
                 'email' => $user->email,
                 'facebook_id' => $user->id,
                 'permission_id' => 1,
+                'money' => 999999999
             ]);
             Auth::login($newUser);
 

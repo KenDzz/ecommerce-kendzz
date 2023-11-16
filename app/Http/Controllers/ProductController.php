@@ -74,6 +74,7 @@ class ProductController extends Controller
             $data['status'] = true;
         } else {
             $cart[$id] = [
+                "id" => $product->id,
                 "name" => $product->name,
                 "quantity" => $checkInfo['quantity'],
                 "category" => $productType->name,
@@ -103,6 +104,15 @@ class ProductController extends Controller
             $data['status'] = true;
         }
         return response()->json($data);
+    }
+
+    public function removeToCartAll()
+    {
+        $cart = session()->get('cart');
+        if(isset($cart)) {
+            $cart = []; 
+            session()->put('cart', $cart);
+        }
     }
 
     public function reloadCart(){

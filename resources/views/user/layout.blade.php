@@ -20,6 +20,8 @@
                         <nav class="flex space-x-2 border-r-2 border-gray-400 lg:flex-col lg:space-x-0 lg:space-y-1 ">
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200"
                                 href="{{ route('user-info') }}">Thông tin tài khoản</a>
+                                <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200"
+                                href="{{ route('user-order-summary') }}">Đơn hàng</a>
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 bg-muted hover:bg-gray-200"
                                 href="/examples/forms/account">Bảo mật</a>
                             <a class="inline-flex items-center justify-start px-4 py-2 text-sm font-medium transition-colors rounded-l-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 hover:bg-gray-200 "

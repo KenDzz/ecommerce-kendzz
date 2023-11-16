@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-                    <div class="px-4 pt-8">
+                    <div class="px-4 pt-8 tab-one" >
                         <p class="text-xl font-medium">Đơn hàng</p>
                         <p class="text-gray-400">Kiểm tra các mục của bạn. Và lựa chọn phương thức vận chuyển phù hợp.</p>
                         <div class="px-2 py-4 mt-8 space-y-3 overflow-y-auto bg-white border rounded-lg h-96 sm:px-6" >
@@ -69,7 +69,7 @@
                         </div>
 
                         <p class="mt-8 text-lg font-medium">Phương thức vận chuyển</p>
-                        <form class="grid gap-6 mt-5">
+                        <form class="grid gap-6 mt-5 form-choose-shipping">
                             <div class="relative">
                                 <input class="hidden peer" id="radio_1" type="radio" name="radio" disabled />
                                 <span
@@ -102,14 +102,33 @@
                             </div>
                         </form>
                     </div>
+
                     <div class="px-4 pt-8 mt-10 bg-gray-50 lg:mt-0">
+
                         <p class="text-xl font-medium">Chi tiết thanh toán</p>
                         <p class="text-gray-400">Hoàn tất đơn đặt hàng của bạn bằng cách cung cấp chi tiết thanh toán của bạn.</p>
-                        <div class="">
+                        <div class="hidden mt-5 payment-susses">
+                            <svg viewBox="0 0 24 24" class="w-16 h-16 mx-auto my-6 text-green-600">
+                                <path fill="currentColor"
+                                    d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z">
+                                </path>
+                            </svg>
+                            <div class="text-center">
+                                <h3 class="text-base font-semibold text-center text-gray-900 md:text-2xl">Thanh toán thành công</h3>
+                                <p class="my-2 text-gray-600">Cảm ơn bạn đã hoàn tất thanh toán trực tuyến an toàn của mình.</p>
+                                <p> Chúc bạn có một ngày tuyệt vời!  </p>
+                                <div class="py-10 text-center">
+                                    <a href="{{ route('index') }}" class="px-12 py-3 font-semibold text-white bg-indigo-600 hover:bg-indigo-500">
+                                        Trang chủ
+                                   </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-payment">
 
                             <p class="mt-8 text-lg font-medium">Địa chỉ giao hàng</p>
                             <div class="relative py-2 mt-4 border-b ">
-                                <button class="absolute block w-24 px-2 py-1 mb-2 text-sm font-medium text-center text-blue-700 -translate-y-1/2 border border-blue-700 border-solid rounded-lg bborder-gray-300 hover:text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 right-4 top-1/2">Thay đổi</button>
+                                <a href="{{ route('user-shipping-addresses') }}" class="absolute block w-24 px-2 py-1 mb-2 text-sm font-medium text-center text-blue-700 -translate-y-1/2 border border-blue-700 border-solid rounded-lg bborder-gray-300 hover:text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 right-4 top-1/2">Thay đổi</a>
                                 <label
                                     class="flex p-4 border border-gray-300 rounded-lg cursor-pointer select-none peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50"
                                     for="radio_2">
@@ -156,15 +175,15 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <p class="text-sm font-medium text-gray-900">Shipping</p>
-                                    <p class="font-semibold text-gray-900">{{ number_format($priceShippingSPX, 0, ',', '.') . ' đ' }}</p>
+                                    <p class="font-semibold text-gray-900 text-cost-shipping"></p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between mt-6">
                                 <p class="text-sm font-medium text-gray-900">Total</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ number_format($total+$priceShippingSPX, 0, ',', '.') . ' đ' }}</p>
+                                <p class="text-2xl font-semibold text-gray-900 text-total-price-checkout" attr-price="{{$total}}">{{ number_format($total, 0, ',', '.') . ' đ' }}</p>
                             </div>
                         </div>
-                        <button class="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md">Thanh Toán</button>
+                        <button class="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md btn-pay-cart">Thanh Toán</button>
                     </div>
                 </div>
 

@@ -23,4 +23,8 @@ class Seller extends Model
         'logo'
     ];
 
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
 }

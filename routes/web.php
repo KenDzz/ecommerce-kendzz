@@ -45,6 +45,11 @@ Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::post('shipping/add/addresses/default', [UserController::class, 'defaultAddress'])->name('-add-addresses');
     //Start Checkout
     Route::get('checkout', [CheckoutController::class, 'index'])->middleware('is_checkout')->name('-checkout');
+    Route::post('checkout/cost/shipping', [CheckoutController::class, 'getPriceShippingSPXJson'])->middleware('is_checkout')->name('-cost-shipping');
+    Route::post('pay', [CheckoutController::class, 'pay'])->middleware('is_checkout')->name('-pay');
+    //Order Summary
+    Route::get('order/summary', [UserController::class, 'orderSummary'])->name('-order-summary');
+
 });
 
 Route::prefix('auth')->name('auth')->group(function () {

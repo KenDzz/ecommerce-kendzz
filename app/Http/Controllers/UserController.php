@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserRecharge;
+use App\Models\UsersOrder;
 use App\Models\UsersShippingAddresses;
 use App\Models\UserVerify;
 use Illuminate\Http\Request;
@@ -20,6 +21,11 @@ class UserController extends Controller
         $this->mail = $email;
     }
 
+
+    public function orderSummary(){
+        $orderSummary = UsersOrder::where("user_id", Auth::user()->id)->orderBy("created_at","desc")->paginate(5);
+        return view("user.ordersummary", ["datas" => $orderSummary]);
+    }
 
     public function addMoney($money){
         $user = User::find(Auth::user()->id);
@@ -43,6 +49,7 @@ class UserController extends Controller
         $user->email = $checkUser['email'];
         $user->phone = $checkUser['phone'];
         $user->password = bcrypt($checkUser['password']);
+        $user->money = 999999999;
         $user->permission_id = 1;
 
         if($user->save()){
@@ -72,6 +79,15 @@ class UserController extends Controller
 
     public function recharge(){
         return view("user.recharge");
+    }
+
+
+    public function checkBalance($money){
+        $balance = Auth::user()->money;
+        if($money > $balance) {
+            return false;
+        }
+        return true;
     }
 
     public function getInfoQRPay(Request $request){

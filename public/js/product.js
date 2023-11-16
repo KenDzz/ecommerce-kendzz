@@ -3,6 +3,8 @@ Notiflix.Notify.init({
 });
 
 $(document).ready(function () {
+    getCostShipping();
+
     // Sử dụng event delegation cho các nút size-choice
     $(document).on(
         "change",
@@ -41,6 +43,10 @@ $(document).ready(function () {
                 getsize($(this).val());
             }
         }
+    });
+
+    $(".btn-pay-cart").click(function () {
+        pay();
     });
 
     $(".btn-add-address").click(function () {
@@ -204,9 +210,65 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
+    function pay(){
+        $.ajax({
+            url: "/user/pay",
+            method: "post",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+            },
+            beforeSend: function () {
+                Notiflix.Block.standard(".showcase-container");
+            },
+            complete: function () {
+                Notiflix.Block.remove(".showcase-container");
+            },
+        })
+            .done(function (data) {
+                if (data['status'] == false) {
+                    Notiflix.Notify.failure(data['content']);
+                    return;
+                }
+                reloadCart()
+                $(".form-payment").addClass("hidden");
+                $(".btn-pay-cart").addClass("hidden");
+                $(".payment-susses").removeClass("hidden");
+                $(".tab-one").addClass("blur-box");
+                console.log(data);
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
 
-    function name(params) {
 
+    function getCostShipping() {
+        if ($('.text-cost-shipping').length > 0) {
+            $.ajax({
+                url: "/user/checkout/cost/shipping",
+                method: "post",
+                dataType: "json",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: {
+                },
+                beforeSend: function () {
+                    Notiflix.Block.standard(".form-choose-shipping");
+                },
+                complete: function () {
+                    Notiflix.Block.remove(".form-choose-shipping");
+                },
+            })
+                .done(function (data) {
+                    $('.text-cost-shipping').html(data['price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ");
+                    var totalPrice = parseInt($('.text-total-price-checkout').attr('attr-price'));
+                    totalPrice += parseInt(data['price']);
+                    $('.text-total-price-checkout').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ");
+                })
+                .fail(function (jqXHR, ajaxOptions, thrownError) {});
+        }
     }
 
 

@@ -25,7 +25,8 @@ class Product extends Model
         'discount',
         'quantity',
         'monthly_purchases',
-        'purchases'
+        'purchases',
+        'weight'
     ];
 
 
@@ -40,6 +41,15 @@ class Product extends Model
 
     public function productType(){
         return $this->hasMany(ProductType::class, 'product_id');
+    }
+
+    public function UsersOrder(){
+        return $this->hasMany(UsersOrder::class, 'product_id');
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class, 'seller_id');
     }
 
     public static function boot()
