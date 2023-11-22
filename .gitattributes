@@ -1,10 +1,4 @@
 * text=auto eol=lf
-*.html linguist-language=PHP
-*.blade.php linguist-language=PHP
-*.html.twig linguist-language=PHP
-*.css linguist-vendored
-*.scss linguist-vendored
-*.js linguist-vendored
 
 *.blade.php diff=html
 *.css diff=css
@@ -16,5 +10,5 @@
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
 
-
+*.blade.php linguist-vendored
 
