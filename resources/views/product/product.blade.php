@@ -114,7 +114,7 @@
                                                     @if ($productType->quantity > 0)
                                                         <label
                                                             class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase transition duration-300 ease-in-out bg-white border rounded-md shadow-sm cursor-pointer group hover:bg-gray-50 focus:outline-none sm:flex-1 hover:scale-105 active:bg-indigo-500 active:text-white">
-                                                            <img src="/{{ $productType->img_url }}"
+                                                            <img src="{{ url($productType->img_url) }}"
                                                                 alt="{{ $productType->name }}"
                                                                 class="object-cover w-8 h-8 mr-2" />
                                                             <input type="radio" id="category-choice"
@@ -129,7 +129,7 @@
                                                     @else
                                                         <label
                                                             class="relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-200 uppercase transition duration-300 ease-in-out border rounded-md cursor-not-allowed active:bg-indigo-500 active:text-white hover:scale-105 group hover:bg-gray-50 focus:outline-none sm:flex-1 bg-gray-50">
-                                                            <img src="/{{ $productType->img_url }}"
+                                                            <img src="{{ url($productType->img_url) }}"
                                                                 alt="{{ $productType->name }}"
                                                                 class="object-cover w-8 h-8 mr-2" />
 

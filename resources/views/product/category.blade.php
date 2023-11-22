@@ -45,10 +45,13 @@
                                             @foreach ($product->productMedia as $key => $productMedia)
                                                 @if ($key == 0)
                                                     <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
-                                                        width="300" class="product-img default">
+                                                    width="300" class="h-52 w-52 product-img default">
                                                 @else
                                                     <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
-                                                        width="300" class="product-img hover">
+                                                    width="300" class="h-52 w-52 product-img hover">
+                                                @endif
+                                                @if ($key == 1)
+                                                    @break
                                                 @endif
                                             @endforeach
                                         @else
@@ -115,9 +118,8 @@
                             @endforeach
 
                         @endif
-                        {!! $products->links('vendor.pagination.tailwind') !!}
                     </div>
-
+                    {!! $products->links('vendor.pagination.tailwind') !!}
                 </div>
 
             </div>

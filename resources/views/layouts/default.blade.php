@@ -40,7 +40,7 @@
     - MODAL
   -->
 
-  <div class="modal" data-modal>
+  {{-- <div class="modal" data-modal>
 
     <div class="modal-close-overlay" data-modal-overlay></div>
 
@@ -78,7 +78,7 @@
 
     </div>
 
-  </div>
+  </div> --}}
 
 
 

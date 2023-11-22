@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CrawlProductController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -29,6 +30,10 @@ Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('u
 Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove-from-cart');
 Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('reload-cart');
 Route::get('getIDSubLocation/{id}/{name}', [UserController::class, 'getIDSubLocation'])->name('getIDSubLocation');
+Route::get('getListMenuTiki', [CrawlProductController::class, 'getListMenuTiki'])->name('getListMenuTiki');
+Route::get('getListProductTiki/{category}/{urlKey}/{page}/{limit}', [CrawlProductController::class, 'getListProductTiki'])->name('getListProductTiki');
+Route::get('getDetailProductTiki/{id}', [CrawlProductController::class,'getDetailProductTiki'])->name('getDetailProductTiki');
+Route::get('crawlProductTiki/{category}/{urlKey}/{totalPage}/{categoryReal}', [CrawlProductController::class,'crawlProductTiki'])->name('crawlProductTiki');
 
 Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('/', [UserController::class, 'infoUser'])->name('-info');

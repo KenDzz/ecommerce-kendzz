@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index(){
+        Product::generateRecommendations('sold_together');
         $products = Product::limit(12)->get();
+       //$product1 = Product::find(1);
+        //dd($product1->getRecommendations('similar_products'));
+
         $data = ['products' => $products];
         return view('product.home',$data);
     }

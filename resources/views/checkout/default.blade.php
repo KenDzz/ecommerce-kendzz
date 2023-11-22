@@ -48,7 +48,7 @@
                             @foreach (session('cart') as $id => $details)
                             <div class="flex flex-col bg-white rounded-lg sm:flex-row">
                                 <img class="object-cover object-center h-24 m-2 border rounded-md w-28"
-                                    src="/{{ $details['image'] }}"
+                                    src="{{ url($details['image']) }}"
                                     alt="" />
                                 <div class="flex flex-col w-full px-4 py-4">
                                     <span class="font-semibold">{{ $details['name'] }}</p>

@@ -184,7 +184,7 @@ $(document).ready(function () {
                     $(".list-product-cart").append(
                         '<li class="flex py-6 li-product-cart" data-id="' +
                             i +
-                            '"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="/' +
+                            '"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="' +
                             data[i].image +
                             '" alt="" class="object-cover object-center w-full h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="#">' +
                             data[i].name +

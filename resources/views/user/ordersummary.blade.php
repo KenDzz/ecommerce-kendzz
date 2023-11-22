@@ -31,7 +31,7 @@
                         <div class="flow-root mt-6 -mb-6 border-t border-gray-200 divide-y divide-gray-200">
                             <div class="py-6 sm:flex">
                                 <div class="flex space-x-4 sm:min-w-0 sm:flex-1 sm:space-x-6 lg:space-x-8">
-                                    <img src="/{{ $data->url_img }}"
+                                    <img src="{{ url($data->url_img) }}"
                                         alt="{{ $data->describes }}"
                                         class="flex-none object-cover object-center w-20 h-20 rounded-md sm:w-48 sm:h-48">
                                     <div class="pt-1.5 min-w-0 flex-1 sm:pt-0">

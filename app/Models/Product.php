@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Umutphp\LaravelModelRecommendation\InteractWithRecommendation;
+use Umutphp\LaravelModelRecommendation\HasRecommendation;
 
-class Product extends Model
+class Product extends Model  implements InteractWithRecommendation
 {
-    use HasFactory;
+    use HasFactory, HasRecommendation;
 
     public $table = "product";
 
     protected $fillable = [
+        'id',
         'name',
         'slug',
         'describes',
@@ -28,6 +31,32 @@ class Product extends Model
         'purchases',
         'weight'
     ];
+
+    public static function getRecommendationConfig() :array
+    {
+        return [
+            'similar_products' => [
+                'recommendation_algorithm'            => 'similarity',
+                'similarity_feature_weight'           => 1,
+                'similarity_numeric_value_weight'     => 1,
+                'similarity_numeric_value_high_range' => 1,
+                'similarity_taxonomy_weight'          => 1,
+                'similarity_feature_attributes'       => [
+                    'rate'
+                ],
+                'similarity_numeric_value_attributes' => [
+                    'price'
+                ],
+                'similarity_taxonomy_attributes'      => [
+                    [
+                        'category' => "name",
+                    ]
+                ],
+                'recommendation_count'                => 2,
+                'recommendation_order'                => 'desc'
+            ]
+        ];
+    }
 
 
     public function category()

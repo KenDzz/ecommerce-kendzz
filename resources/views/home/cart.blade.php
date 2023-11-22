@@ -50,8 +50,8 @@
                                                 <li class="flex py-6 li-product-cart" data-id="{{ $id }}">
                                                     <div
                                                         class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                                                        <img src="/{{ $details['image'] }}" alt=""
-                                                            class="object-cover object-center w-full h-full">
+                                                        <img src="{{ url($details['image']) }}" alt=""
+                                                            class="object-cover object-center w-24 h-full">
                                                     </div>
 
                                                     <div class="flex flex-col flex-1 ml-4">

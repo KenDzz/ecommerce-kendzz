@@ -19,7 +19,7 @@ class Category extends Model
     public $timestamps = false;
 
     public function products(){
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasOne(Product::class, 'category_id');
     }
 
 }

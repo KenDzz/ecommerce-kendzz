@@ -22,8 +22,10 @@ class ProductController extends Controller
 
 
     public function detailProduct($id, $slug){
+        Product::generateRecommendations('similar_products');
         $product = Product::where('id',$id)->where('slug',$slug)->firstOrFail();
         $productTypes = $product->productType;
+        dd($product->getRecommendations('similar_products'));
         return view('product.product',['product' => $product, 'productTypes' => $productTypes]);
     }
 
@@ -59,8 +61,19 @@ class ProductController extends Controller
             'size' => [],
         ]);
         $product = Product::findOrFail($checkInfo['id']);
-        $productType = $product->productType->where('id',$checkInfo['category'])->first();
-        $productSize = $productType->productSize->where('id',$checkInfo['size'])->first();
+        $productType = null;
+        $productSize = null;
+        if (isset($checkInfo['category']) && !is_null($checkInfo['category'])) {
+            $productType = $product->productType->where('id',$checkInfo['category'])->first();
+        }else{
+            $checkInfo['category'] = "";
+        }
+
+        if (isset($checkInfo['size']) && !is_null($checkInfo['size'])) {
+            $productSize = $productType->productSize->where('id',$checkInfo['size'])->first();
+        }else{
+            $checkInfo['size'] = "";
+        }
 
         $cart = session()->get('cart', []);
         $id = $checkInfo['id'].$checkInfo['category'].$checkInfo['size'];
@@ -77,7 +90,7 @@ class ProductController extends Controller
                 "id" => $product->id,
                 "name" => $product->name,
                 "quantity" => $checkInfo['quantity'],
-                "category" => $productType->name,
+                "category" => $productType != null ? $productType->name : "",
                 "size" => $productSize != null ? $productSize->name : "",
                 "price" => $product->price,
                 "image" => $image
@@ -110,7 +123,7 @@ class ProductController extends Controller
     {
         $cart = session()->get('cart');
         if(isset($cart)) {
-            $cart = []; 
+            $cart = [];
             session()->put('cart', $cart);
         }
     }

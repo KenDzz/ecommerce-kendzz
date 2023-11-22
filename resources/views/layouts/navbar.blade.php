@@ -93,7 +93,7 @@
                         $displayedName = "Hi, ". strlen($name) > 10 ? substr($name, 0, 10) . '...' : $name;
                     @endphp
                       <div class="dropdown-menu">
-                          <button id="dropdownAvatarNameButton"
+                          <a id="dropdownAvatarNameButton" href="{{ route('user-info') }}"
                               class="flex items-center p-2 text-sm font-medium text-gray-900 rounded-full md:mr-0 ring-4 ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
                               type="button">
                               <span class="sr-only">Open user menu</span>
@@ -104,7 +104,7 @@
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                       stroke-width="2" d="m1 1 4 4 4-4" />
                               </svg>
-                          </button>
+                          </a>
 
                           <!-- Dropdown menu -->
                           <div
@@ -189,23 +189,18 @@
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 14]) }}">PC</a>
+                                  <a href="{{ route('category-product', ['id' => 15]) }}">Laptop - Máy Vi Tính - Linh kiện</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 15]) }}">Laptop</a>
+                                <a href="{{ route('category-product', ['id' => 16]) }}">Điện Thoại - Máy tính bảng</a>
+                                </li>
+                              <li class="panel-list-item">
+                                  <a href="{{ route('category-product', ['id' => 22]) }}">Máy Ảnh - Máy Quay Phim</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 17]) }}">Camera</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 16]) }}">Máy tính bảng</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 18]) }}">Tai nghe</a>
+                                  <a href="{{ route('category-product', ['id' => 21]) }}">Thiết Bị Số - Phụ Kiện Số</a>
                               </li>
 
                               <li class="panel-list-item">
@@ -220,21 +215,23 @@
                           <ul class="dropdown-panel-list">
 
                               <li class="menu-title">
-                                  <a href="#">Nam</a>
+                                  <a href="{{ route('category-product', ['id' => 1]) }}">Nam</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 2]) }}">Quần Short</a>
+                                  <a href="{{ route('category-product', ['id' => 17]) }}">Túi thời trang nam</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 2]) }}">Quần Jean</a>
+                                  <a href="{{ route('category-product', ['id' => 18]) }}">Giày - Dép nam</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 4]) }}">Giày</a>
-                              </li>
-
+                                    <a href="{{ route('category-product', ['id' => 7]) }}">Phụ kiện thời trang</a>
+                                </li>
+                                <li class="panel-list-item">
+                                    <a href="{{ route('category-product', ['id' => 8]) }}">Đồng hồ và Trang sức</a>
+                                </li>
                               <li class="panel-list-item">
                                   <a href="#">
                                       <img src="{{ url('images/mens-banner.jpg') }}" alt="men's fashion"
@@ -247,28 +244,25 @@
                           <ul class="dropdown-panel-list">
 
                               <li class="menu-title">
-                                  <a href="#">Nữ</a>
+                                  <a href="{{ route('category-product', ['id' => 2]) }}">Nữ</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 6]) }}">Váy và Áo dài</a>
+                                  <a href="{{ route('category-product', ['id' => 19]) }}">Túi thời trang nữ</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 7]) }}">Hoa Tai</a>
+                                  <a href="{{ route('category-product', ['id' => 20]) }}">Giày - Dép nữ</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 8]) }}">Vòng cổ</a>
+                                  <a href="{{ route('category-product', ['id' => 7]) }}">Phụ kiện thời trang</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 9]) }}">Trang điểm</a>
+                                  <a href="{{ route('category-product', ['id' => 8]) }}">Đồng hồ và Trang sức</a>
                               </li>
 
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 6]) }}">Váy và Áo dài</a>
-                              </li>
 
                               <li class="panel-list-item">
                                   <a href="#">
@@ -279,129 +273,64 @@
 
                           </ul>
 
-                          <ul class="dropdown-panel-list">
-
-                              <li class="menu-title">
-                                  <a href="#">Thiết bị điện tử</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 19]) }}">Đồng hồ thông minh</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 20]) }}">TV thông minh</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 21]) }}">Bàn phím</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 22]) }}">Chuột</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 23]) }}">Microphone</a>
-                              </li>
-
-                              <li class="panel-list-item">
-                                  <a href="#">
-                                      <img src="{{ url('images/electronics-banner-2.jpg') }}" alt="mouse collection"
-                                          width="250" height="119">
-                                  </a>
-                              </li>
-
-                          </ul>
-
                       </div>
                   </li>
 
                   <li class="menu-category">
-                      <a href="#" class="menu-title">Nam</a>
+                      <a href="{{ route('category-product', ['id' => 1]) }}" class="menu-title">Nam</a>
 
                       <ul class="dropdown-list">
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 1]) }}">Áo</a>
+                              <a href="{{ route('category-product', ['id' => 17]) }}">Túi thời trang nam</a>
                           </li>
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 2]) }}">Quần Short</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 4]) }}">Giày</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 5]) }}">Ví</a>
+                              <a href="{{ route('category-product', ['id' => 18]) }}">Giày - Dép nam</a>
                           </li>
 
                       </ul>
                   </li>
 
                   <li class="menu-category">
-                      <a href="#" class="menu-title">Nữ</a>
+                      <a href="{{ route('category-product', ['id' => 2]) }}" class="menu-title">Nữ</a>
 
                       <ul class="dropdown-list">
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 6]) }}">Váy và Áo dài</a>
+                              <a href="{{ route('category-product', ['id' => 19]) }}">Túi thời trang nữ</a>
                           </li>
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 7]) }}">Hoa Tai</a>
+                              <a href="{{ route('category-product', ['id' => 20]) }}">Giày - Dép nữ</a>
+                          </li>
+
+
+                      </ul>
+                  </li>
+
+                  <li class="menu-category">
+                      <a href="#" class="menu-title">Phụ kiện</a>
+
+                      <ul class="dropdown-list">
+
+                          <li class="dropdown-item">
+                              <a href="{{ route('category-product', ['id' => 7]) }}">Phụ kiện thời trang</a>
                           </li>
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 8]) }}">Vòng cổ</a>
+                              <a href="{{ route('category-product', ['id' => 8]) }}">Đồng hồ và Trang sức</a>
                           </li>
 
                           <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 9]) }}">Trang điểm</a>
+                              <a href="{{ route('category-product', ['id' => 9]) }}">Balo và Vali</a>
                           </li>
 
                       </ul>
                   </li>
 
                   <li class="menu-category">
-                      <a href="#" class="menu-title">Trang sức</a>
-
-                      <ul class="dropdown-list">
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 7]) }}">Hoa tai</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 10]) }}">Nhẫn đôi</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 8]) }}">Vòng cổ</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 11]) }}">Vòng tay</a>
-                          </li>
-
-                      </ul>
-                  </li>
-
-                  <li class="menu-category">
-                      <a href="#" class="menu-title">Nước hoa</a>
-
-                      <ul class="dropdown-list">
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 12]) }}">Khử mùi</a>
-                          </li>
-
-                          <li class="dropdown-item">
-                              <a href="{{ route('category-product', ['id' => 13]) }}">Nước hoa</a>
-                          </li>
-                      </ul>
+                      <a href="{{ route('category-product', ['id' => 23]) }}" class="menu-title">Đồ Chơi - Mẹ & Bé</a>
                   </li>
 
                   <li class="menu-category">
