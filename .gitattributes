@@ -12,5 +12,5 @@ CHANGELOG.md export-ignore
 
 * linguist-vendored
 *.blade.php linguist-language=PHP
-*.css linguist-vendored=false
+*.css linguist-vendored=PHP
 
