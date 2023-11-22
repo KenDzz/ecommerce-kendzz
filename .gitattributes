@@ -11,4 +11,5 @@ CHANGELOG.md export-ignore
 .styleci.yml export-ignore
 
 * linguist-vendored
-*.php linguist-vendored=false
+*.php linguist-vendored=true
+*.css linguist-vendored=false
