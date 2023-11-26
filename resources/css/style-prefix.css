@@ -597,6 +597,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   z-index: 5;
 }
 
+
 .mobile-bottom-navigation .action-btn {
   position: relative;
   font-size: 26px;
@@ -1926,6 +1927,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   color: var(--salmon-pink);
   font-size: var(--fs-8);
 }
+
 
 .blog-title {
   color: var(--eerie-black);

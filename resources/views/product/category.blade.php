@@ -119,7 +119,9 @@
 
                         @endif
                     </div>
-                    {!! $products->links('vendor.pagination.tailwind') !!}
+                    <div class="mt-3">
+                        {!! $products->links('vendor.pagination.tailwind') !!}
+                    </div>
                 </div>
 
             </div>

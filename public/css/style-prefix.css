@@ -959,6 +959,13 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   margin-bottom: 10px;
 }
 
+.describes-product img{
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+
 .category-item-title {
   color: var(--eerie-black);
   font-size: var(--fs-9);

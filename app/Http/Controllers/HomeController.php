@@ -10,11 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index(){
-        Product::generateRecommendations('sold_together');
         $products = Product::limit(12)->get();
-       //$product1 = Product::find(1);
-        //dd($product1->getRecommendations('similar_products'));
-
         $data = ['products' => $products];
         return view('product.home',$data);
     }
@@ -22,10 +18,20 @@ class HomeController extends Controller
     public function formatCurrency($amount, $discount)
     {
         if($discount > 0){
-            $dis = $amount / $discount;
+            $dis = ($amount * ($discount / 100));
             $amount = $amount - $dis;
         }
         return number_format($amount, 0, ',', '.') . ' VND';
     }
+
+    public function calculateCurrency($amount, $discount)
+    {
+        if($discount > 0){
+            $dis = ($amount * ($discount / 100));
+            $amount = $amount - $dis;
+        }
+        return $amount;
+    }
+
 
 }

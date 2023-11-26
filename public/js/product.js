@@ -2,6 +2,8 @@ Notiflix.Notify.init({
     position: "right-bottom",
 });
 
+
+
 $(document).ready(function () {
     getCostShipping();
 
@@ -32,6 +34,16 @@ $(document).ready(function () {
 
     $("#btn-close-modal-address").click(function () {
         $("#address-modal").toggleClass("hidden");
+    });
+
+    //Product Review
+    $(".btn-open-product-review").click(function () {
+        $('#data-product-id').val($(this).attr("data-product-id"));
+        $("#product-review-modal").toggleClass("hidden");
+    });
+
+    $("#btn-close-product-review").click(function () {
+        $("#product-review-modal").toggleClass("hidden");
     });
 
     $("input[type=radio][name=category-choice]").change(function () {
@@ -131,6 +143,26 @@ $(document).ready(function () {
         },
     });
 
+
+    $(".btn-post-review").on("click", function () {
+        $.ajax({
+            url: "review",
+            method: "post",
+            dataType: "json",
+            data: $("#form-review").serialize(),
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+        })
+            .done(function (data) {
+
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    });
+
+
     $(".btn-add-product-to-cart").on("click", function () {
         var id = $(".product-content").attr("productId");
         var quantity = $(".custom-input-number-product").val();
@@ -154,6 +186,8 @@ $(document).ready(function () {
         }
         addCart(id, quantity, category, size);
     });
+
+
 
     function reloadCart() {
         $.ajax({

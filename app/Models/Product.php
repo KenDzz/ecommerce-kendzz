@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Umutphp\LaravelModelRecommendation\InteractWithRecommendation;
 use Umutphp\LaravelModelRecommendation\HasRecommendation;
+use Umutphp\LaravelModelRecommendation\RecommendationsModel;
 
 class Product extends Model  implements InteractWithRecommendation
 {
@@ -42,22 +43,27 @@ class Product extends Model  implements InteractWithRecommendation
                 'similarity_numeric_value_high_range' => 1,
                 'similarity_taxonomy_weight'          => 1,
                 'similarity_feature_attributes'       => [
-                    'rate'
+                    'name'
                 ],
                 'similarity_numeric_value_attributes' => [
-                    'price'
+                    'rate'
                 ],
                 'similarity_taxonomy_attributes'      => [
                     [
                         'category' => "name",
                     ]
                 ],
-                'recommendation_count'                => 2,
+                'recommendation_count'                => 5,
                 'recommendation_order'                => 'desc'
             ]
         ];
     }
 
+
+
+    public function Recommendations(){
+        return $this->hasMany(RecommendationsModel::class, 'source_id');
+    }
 
     public function category()
     {

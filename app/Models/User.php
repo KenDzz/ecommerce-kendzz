@@ -51,4 +51,9 @@ class User extends Authenticatable
     public function userAddress() {
         return $this->hasMany(UsersShippingAddresses::class, 'user_id');
     }
+
+    public function productReview(){
+        return $this->hasOne(ProductReviews::class, 'user_id');
+    }
+
 }

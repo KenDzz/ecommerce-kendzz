@@ -4,8 +4,11 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CrawlProductController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductReviewsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerifyController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->middleware('is_verify_email')->name('index');
+Route::get('/media/{path1}/{path2}/{filename}', [MediaController::class, 'show'])->name('media');
 Route::get('/category/{id}', [ProductController::class, 'categoryProduct'])->middleware('is_verify_email')->name('category-product');
 Route::get('/product-{id}/{slug}', [ProductController::class, 'detailProduct'])->middleware('is_verify_email')->name('detail-product');
 Route::post('/getsize', [ProductController::class, 'getSize'])->middleware('is_verify_email')->name('get-size');
@@ -54,6 +58,8 @@ Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::post('pay', [CheckoutController::class, 'pay'])->middleware('is_checkout')->name('-pay');
     //Order Summary
     Route::get('order/summary', [UserController::class, 'orderSummary'])->name('-order-summary');
+    Route::post('order/uploads/process', [FileUploadController::class, 'process'])->name('-uploads-process');
+    Route::post('order/review', [ProductReviewsController::class, 'addReview'])->name('-review-import');
 
 });
 

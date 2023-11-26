@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductReviews;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    private $homeController;
+
+    public function __construct(HomeController $homeController) {
+        $this->homeController = $homeController;
+    }
+
     public function categoryProduct($id){
         if(is_numeric($id)){
             $products = Product::where('category_id',$id)->paginate(12);
@@ -22,11 +30,36 @@ class ProductController extends Controller
 
 
     public function detailProduct($id, $slug){
-        Product::generateRecommendations('similar_products');
         $product = Product::where('id',$id)->where('slug',$slug)->firstOrFail();
         $productTypes = $product->productType;
-        dd($product->getRecommendations('similar_products'));
-        return view('product.product',['product' => $product, 'productTypes' => $productTypes]);
+        $DataRecommendations = $product->Recommendations->where('order_column' ,'>', 0)->toArray();
+        $targetIds = array_column($DataRecommendations, 'target_id');
+        $productRecommendations = Product::whereIn('id', $targetIds)->get();
+        $productReviews = ProductReviews::where('product_id', $product->id)->get();
+        $reviewsWithRating1 = $productReviews->where('rate', 1);
+        $reviewsWithRating2 = $productReviews->where('rate', 2);
+        $reviewsWithRating3 = $productReviews->where('rate', 3);
+        $reviewsWithRating4 = $productReviews->where('rate', 4);
+        $reviewsWithRating5 = $productReviews->where('rate', 5);
+        $data = [
+            'product' => $product,
+            'productTypes' => $productTypes,
+            'productRecommendations' => $productRecommendations,
+            'productReviews' => $productReviews ,
+            'reviewsWithRating1' => $reviewsWithRating1 ,
+            'reviewsWithRating2' => $reviewsWithRating2 ,
+            'reviewsWithRating3' => $reviewsWithRating3 ,
+            'reviewsWithRating4' => $reviewsWithRating4 ,
+            'reviewsWithRating5' => $reviewsWithRating5 
+        ];
+
+        return view('product.product', $data);
+    }
+
+    public function UpdateRecommendationsSimilar(){
+        set_time_limit(0);
+        Product::generateRecommendations('similar_products');
+        return response()->json(['status' => 'success']);
     }
 
     public function getSize(Request $request){
@@ -74,7 +107,10 @@ class ProductController extends Controller
         }else{
             $checkInfo['size'] = "";
         }
-
+        $price = $product->price;
+        if($product->discount > 0){
+            $price = $this->homeController->calculateCurrency($product->price, $product->discount);
+        }
         $cart = session()->get('cart', []);
         $id = $checkInfo['id'].$checkInfo['category'].$checkInfo['size'];
         $productMedia = $product->productMedia->first();
@@ -92,7 +128,7 @@ class ProductController extends Controller
                 "quantity" => $checkInfo['quantity'],
                 "category" => $productType != null ? $productType->name : "",
                 "size" => $productSize != null ? $productSize->name : "",
-                "price" => $product->price,
+                "price" => $price,
                 "image" => $image
             ];
             $data['status'] = true;

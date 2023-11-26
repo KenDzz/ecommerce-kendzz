@@ -1,3 +1,6 @@
+@import 'lightgallery/css/lightgallery-bundle.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

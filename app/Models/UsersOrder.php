@@ -21,7 +21,8 @@ class UsersOrder extends Model
         'transporters',
         'describes',
         'quantity',
-        'url_img'
+        'url_img',
+        'is_review'
     ];
 
     public function products(){
