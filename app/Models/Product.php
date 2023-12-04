@@ -61,6 +61,7 @@ class Product extends Model  implements InteractWithRecommendation
 
 
 
+
     public function Recommendations(){
         return $this->hasMany(RecommendationsModel::class, 'source_id');
     }
@@ -80,6 +81,10 @@ class Product extends Model  implements InteractWithRecommendation
 
     public function UsersOrder(){
         return $this->hasMany(UsersOrder::class, 'product_id');
+    }
+
+    public function UsersFavourite(){
+        return $this->hasMany(UsersFavourite::class, 'product_id');
     }
 
     public function seller()

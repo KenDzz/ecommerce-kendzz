@@ -145,9 +145,13 @@
                   @endif
 
 
-                  <button class="action-btn">
+                  <button class="action-btn btn-favourite">
                       <ion-icon name="heart-outline"></ion-icon>
-                      <span class="count">0</span>
+                      @if (session()->has('favourite') && is_array(session('favourite')))
+                          <span class="count count-favourite">{{ count(session('favourite')) }}</span>
+                      @else
+                          <span class="count count-favourite">0</span>
+                      @endif
                   </button>
 
                   <button class="action-btn btn-cart">

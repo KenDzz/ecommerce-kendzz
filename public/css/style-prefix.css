@@ -145,6 +145,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 
 
+.hidden-important{
+    display: none !important;
+}
+
 
 
 /*-----------------------------------*\
@@ -389,6 +393,18 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
  * NOTIFICATION TOAST
  */
 
+.toast{
+    background: var(--white);
+    max-width: 300px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 15px;
+    z-index: 5;
+}
+
+
 .notification-toast {
   position: fixed;
   bottom: 80px;
@@ -417,8 +433,8 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   -o-transition: 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
   z-index: 5;
-  -webkit-animation: slideInOut 10s ease-in-out infinite;
-          animation: slideInOut 10s ease-in-out infinite;
+  /* -webkit-animation: slideInOut 10s ease-in-out infinite;
+          animation: slideInOut 10s ease-in-out infinite; */
 }
 
 @-webkit-keyframes slideInOut {
@@ -507,6 +523,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   font-size: var(--fs-7);
   font-weight: var(--weight-500);
   color: var(--onyx);
+  padding-right: 10px;
 }
 
 .toast-meta {
@@ -1746,6 +1763,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   font-weight: var(--weight-500);
   text-transform: uppercase;
   margin-bottom: 10px;
+}
+
+.color-icon{
+    color:   var(--salmon-pink);
 }
 
 .product-grid .showcase-title {

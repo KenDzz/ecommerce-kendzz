@@ -250,8 +250,8 @@
 
                                 <div class="showcase-actions">
 
-                                    <button class="btn-action">
-                                        <ion-icon name="heart-outline"></ion-icon>
+                                    <button class="btn-action btn-action-favourite" data-product-id="{{$product->id}}">
+                                        <ion-icon name="heart-outline" class="icon-favourite-product"></ion-icon>
                                     </button>
 
                                     <button class="btn-action">

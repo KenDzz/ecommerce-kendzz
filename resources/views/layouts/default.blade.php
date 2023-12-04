@@ -21,6 +21,7 @@
     <link type="text/css" rel="stylesheet" href="{{ url('css/notiflix-3.2.6.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
     <link href="{{ url('css/star-rating.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 
     <!--
     - google font link
@@ -90,7 +91,7 @@
     - NOTIFICATION TOAST
   -->
 
-    <div class="notification-toast" data-toast>
+    <div class="notification-toast"  data-toast>
 
         <button class="toast-close-btn" data-toast-close>
             <ion-icon name="close-outline"></ion-icon>
@@ -124,13 +125,14 @@
 
     @include('layouts.navbar')
 
+    @include('layouts.chat')
 
     @include('home.cart')
 
-
+    @include('home.favourite')
     <!--
     - MAIN
-  -->
+    -->
 
     <main>
 
@@ -146,12 +148,14 @@
 <!--
     - custom js link
   -->
+
 <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
 <script src="{{ url('js/notiflix-3.2.6.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 <script src="{{ url('js/star-rating.min.js') }}"></script>
-
+<script type="module" src="{{ url('js/module.js') }}"></script>
 <script>
     var starrating = new StarRating('.star-rating', {
         stars: function(el, item, index) {
@@ -168,6 +172,6 @@
     - ionicon link
   -->
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js">
-    < /scrip> <
-    /html>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></scrip>
+
+</html>

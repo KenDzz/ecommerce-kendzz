@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductReviews;
 use App\Models\ProductType;
+use App\Models\UsersFavourite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -35,7 +37,7 @@ class ProductController extends Controller
         $DataRecommendations = $product->Recommendations->where('order_column' ,'>', 0)->toArray();
         $targetIds = array_column($DataRecommendations, 'target_id');
         $productRecommendations = Product::whereIn('id', $targetIds)->get();
-        $productReviews = ProductReviews::where('product_id', $product->id)->get();
+        $productReviews = ProductReviews::where('product_id', $product->id)->paginate(12);
         $reviewsWithRating1 = $productReviews->where('rate', 1);
         $reviewsWithRating2 = $productReviews->where('rate', 2);
         $reviewsWithRating3 = $productReviews->where('rate', 3);
@@ -50,10 +52,45 @@ class ProductController extends Controller
             'reviewsWithRating2' => $reviewsWithRating2 ,
             'reviewsWithRating3' => $reviewsWithRating3 ,
             'reviewsWithRating4' => $reviewsWithRating4 ,
-            'reviewsWithRating5' => $reviewsWithRating5 
+            'reviewsWithRating5' => $reviewsWithRating5
         ];
 
         return view('product.product', $data);
+    }
+
+    public function addFavourite(Request $request){
+        $checkData = $request->validate([
+            'id' => ['required', 'numeric'],
+        ]);
+        $findF = UsersFavourite::where('product_id', $checkData['id'])->where('user_id', Auth::user()->id)->first();
+        if($findF){
+            $findF->delete();
+            return response()->json(['status' => 'delete']);
+        }else{
+            $userFavourite = new UsersFavourite();
+            $userFavourite->product_id = $checkData['id'];
+            $userFavourite->user_id = Auth::user()->id;
+            $userFavourite->save();
+        }
+        return response()->json(['status' => 'add']);
+    }
+
+    public function reloadFavourite(){
+        $findF = UsersFavourite::where('user_id', Auth::user()->id)->get();
+        session()->put('favourite', []);
+        $Favourite = session()->get('favourite', []);
+        foreach ($findF as $key => $value) {
+            $productMedia = $value->products->productMedia->first();
+            $image = $productMedia->url;
+            $Favourite[$value->id] = [
+                "id" => $value->product_id,
+                "name" => $value->products->name,
+                "link" => route('detail-product', ['slug'=>urlencode($value->products->slug), 'id' => $value->products->id]),
+                "image" => $image
+            ];
+        }
+        session()->put('favourite', $Favourite);
+        return response()->json(['favourite' => session('favourite')]);
     }
 
     public function UpdateRecommendationsSimilar(){

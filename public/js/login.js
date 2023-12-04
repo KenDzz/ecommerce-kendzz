@@ -215,14 +215,7 @@ $("#btn-login").click(function () {
         })
             .done(function (data) {
                 if (data["status"] == "true") {
-                    Notiflix.Report.success(
-                        "Thông báo",
-                        data["message"],
-                        "Đồng ý",
-                        function cb() {
-                            window.location.href = "/";
-                        }
-                    );
+                    window.location.href = "/";
                 } else {
                     Notiflix.Report.failure(
                         "Thông báo",

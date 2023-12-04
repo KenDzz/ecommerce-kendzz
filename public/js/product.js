@@ -2,11 +2,9 @@ Notiflix.Notify.init({
     position: "right-bottom",
 });
 
-
-
 $(document).ready(function () {
     getCostShipping();
-
+    reloadFavourite();
     // Sử dụng event delegation cho các nút size-choice
     $(document).on(
         "change",
@@ -24,6 +22,11 @@ $(document).ready(function () {
         removeCart($(".li-product-cart").attr("data-id"));
     });
 
+    $(document).on("click", ".btn-delete-product-favourite", function () {
+        console.log($(this).attr("data-product-id"));
+        removeFavourite($(this).attr("data-product-id"));
+    });
+
     $("#btn-modal-add-address").click(function () {
         $("#address-modal").toggleClass("hidden");
         var selectElement = $("#province-modal-address");
@@ -32,14 +35,28 @@ $(document).ready(function () {
         }
     });
 
-    $("#btn-close-modal-address").click(function () {
-        $("#address-modal").toggleClass("hidden");
+    $(".btn-sender-chat").click(function () {
+        event.preventDefault();
+        var sellerID = $(this).attr("data-seller-id");
+        console.log(sellerID);
+    });
+
+
+    $("#open-chat").click(function () {
+        $("#form-chat").toggleClass("hidden-important");
+    });
+
+    $("#btn-hidden-chat").click(function () {
+        $("#form-chat").toggleClass("hidden-important");
     });
 
     //Product Review
     $(".btn-open-product-review").click(function () {
-        $('#data-product-id').val($(this).attr("data-product-id"));
-        $("#product-review-modal").toggleClass("hidden");
+        if(!$(this).hasClass("cursor-not-allowed")){
+            $('#data-product-id').val($(this).attr("data-product-id"));
+            $('#data-order-id').val($(this).attr("data-order-id"));
+            $("#product-review-modal").toggleClass("hidden");
+        }
     });
 
     $("#btn-close-product-review").click(function () {
@@ -60,6 +77,16 @@ $(document).ready(function () {
     $(".btn-pay-cart").click(function () {
         pay();
     });
+
+    $(".action-btn.btn-favourite").click(function() {
+        reloadFavourite();
+        $(".form-favourite").toggleClass("hidden");
+    });
+
+    $(".btn-hidden-favourite").click(function() {
+        $(".form-favourite").toggleClass("hidden");
+    });
+
 
     $(".btn-add-address").click(function () {
         var name = $('#name-modal-address').val();
@@ -143,6 +170,38 @@ $(document).ready(function () {
         },
     });
 
+    $(".btn-action-favourite").on("click", function () {
+        var id = $(this).attr("data-product-id");
+        $.ajax({
+            url: "/user/product/favourite",
+            method: "post",
+            dataType: "json",
+            data: {
+                id: id
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+            error :function( data ) {
+                var errors = $.parseJSON(data.responseText);
+                Notiflix.Notify.failure(errors['message']);
+
+            }
+        })
+            .done(function (data) {
+                if(data['status'] == "add"){
+                    $('.icon-favourite-product-'+id).addClass('color-icon');                    Notiflix.Notify.success("Thêm thành công!");
+
+                }else{
+                    $('.icon-favourite-product-'+id).removeClass('color-icon');                    Notiflix.Notify.success("Thêm thành công!");
+                    Notiflix.Notify.success("Hủy thành công!");
+                }
+                reloadFavourite();
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    });
 
     $(".btn-post-review").on("click", function () {
         $.ajax({
@@ -155,9 +214,15 @@ $(document).ready(function () {
             },
             beforeSend: function () {},
             complete: function () {},
+            error :function( data ) {
+                if(data.status === 422 ){
+                    var errors = $.parseJSON(data.responseText);
+                    Notiflix.Notify.failure(errors['message']);
+                }
+            }
         })
             .done(function (data) {
-
+                location.reload();
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     });
@@ -187,6 +252,28 @@ $(document).ready(function () {
         addCart(id, quantity, category, size);
     });
 
+    function reloadFavourite() {
+        $.ajax({
+            url: "/reload-favourite",
+            method: "get",
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+        })
+        .done(function (data) {
+            $(".list-product-favourite").html("");
+            var data = data["favourite"];
+            var totalPrice = 0;
+            $.each(data, function (i, item) {
+                $(".list-product-favourite").append('<li class="flex py-6 li-product-cart" data-id="'+ i +'"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="'+data[i].image+'" alt="" class="object-cover object-center w-24 h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="'+data[i].link+'">'+data[i].name+'</a></h3></div></div><div class="flex items-end justify-between flex-1 text-sm"><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-favourite" data-product-id="'+ data[i].id +'"">Xóa</button></div></div></div></li>');
+            });
+            $(".count-favourite").html(Object.keys(data).length);
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
 
 
     function reloadCart() {
@@ -345,6 +432,34 @@ $(document).ready(function () {
                 if (data["status"] == true) {
                     reloadCart();
                 }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
+
+    function removeFavourite(id) {
+        $.ajax({
+            url: "/user/product/favourite",
+            method: "post",
+            dataType: "json",
+            data: {
+                id: id
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+            error :function( data ) {
+                var errors = $.parseJSON(data.responseText);
+                Notiflix.Notify.failure(errors['message']);
+
+            }
+        })
+            .done(function (data) {
+
+                reloadFavourite();
+
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
@@ -709,6 +824,7 @@ $(document).ready(function () {
 const cartButton = document.querySelector(".action-btn.btn-cart");
 const cartSlideOver = document.querySelector(".form-cart");
 const closeCart = document.querySelector(".btn-hidden-cart");
+
 
 cartButton.addEventListener("click", () => {
     cartSlideOver.classList.toggle("hidden");

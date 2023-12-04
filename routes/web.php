@@ -33,6 +33,7 @@ Route::post('add-to-cart', [ProductController::class, 'addToCart'])->name('add-t
 Route::patch('update-cart', [ProductController::class, 'updateToCart'])->name('update-cart');
 Route::delete('remove-from-cart', [ProductController::class, 'removeToCart'])->name('remove-from-cart');
 Route::get('reload-cart', [ProductController::class, 'reloadCart'])->name('reload-cart');
+Route::get('reload-favourite', [ProductController::class, 'reloadFavourite'])->name('reload-favourite');
 Route::get('getIDSubLocation/{id}/{name}', [UserController::class, 'getIDSubLocation'])->name('getIDSubLocation');
 Route::get('getListMenuTiki', [CrawlProductController::class, 'getListMenuTiki'])->name('getListMenuTiki');
 Route::get('getListProductTiki/{category}/{urlKey}/{page}/{limit}', [CrawlProductController::class, 'getListProductTiki'])->name('getListProductTiki');
@@ -60,6 +61,8 @@ Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('order/summary', [UserController::class, 'orderSummary'])->name('-order-summary');
     Route::post('order/uploads/process', [FileUploadController::class, 'process'])->name('-uploads-process');
     Route::post('order/review', [ProductReviewsController::class, 'addReview'])->name('-review-import');
+    //Users Favourite
+    Route::post('product/favourite', [ProductController::class, 'addFavourite'])->name('-product-favourite');
 
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BuyProductEvent;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\UsersOrder;
@@ -41,7 +42,9 @@ class CheckoutController extends Controller
             $order->total_price = $details['price'] * $details['quantity'];
             $order->transporters = "SPX";
             $order->url_img = $details['image'];
+            $order->is_review = false;
             $order->save();
+            event(new BuyProductEvent($order));
             $index++;
         }
     }
@@ -66,6 +69,7 @@ class CheckoutController extends Controller
           $data['content'] = "Số dư không đủ";
             }
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             $data['content'] = "Lỗi trong quá trình thanh toán.";
         }

@@ -51,7 +51,7 @@
                                     <button type="button"
                                         class="w-full flex items-center justify-center bg-indigo-600 py-2 px-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-full sm:flex-grow-0">Mua
                                         lại</button>
-                                    <button data-product-id="{{$data->product_id}}" type="button"
+                                    <button data-product-id="{{$data->product_id}}" data-order-id="{{ $data->id }}" type="button"
                                         class="btn-open-product-review w-full flex items-center justify-center bg-indigo-600 py-2 px-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-full sm:flex-grow-0 {{ !$data->is_review ? "" : "cursor-not-allowed opacity-50" }}" >Đánh
                                         giá</button>
                                     <button type="button"
@@ -93,6 +93,7 @@
                         @csrf
                         <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Đánh giá sản phẩm</h3>
                         <input type="hidden" name="id" id="data-product-id">
+                        <input type="hidden" name="oderID" id="data-order-id">
                         <div class="flex justify-center mb-5">
                             <select class="star-rating w-52" name="rate">
                                 <option value="">Select a rating</option>
