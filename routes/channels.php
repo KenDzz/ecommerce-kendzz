@@ -20,3 +20,12 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('channel-user-order', function ($user) {
     return true;
 });
+
+
+Broadcast::channel('user.{toUserId}', function ($user, $toUserId) {
+    return $user->id == $toUserId;
+});
+
+Broadcast::channel('seller.{toUserId}', function ($user, $toUserId) {
+    return $user->seller->id == $toUserId;
+});

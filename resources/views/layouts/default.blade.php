@@ -34,9 +34,7 @@
     @vite('resources/js/app.js')
 </head>
 
-<body>
-
-
+<body attr-data-id="{{ Auth::user()->id ?? 0 }}">
     <div class="overlay" data-overlay></div>
 
     <!--

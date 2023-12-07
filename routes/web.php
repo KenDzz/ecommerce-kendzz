@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CrawlProductController;
+use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\HomeController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReviewsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsersChatController;
 use App\Http\Controllers\UserVerifyController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +41,17 @@ Route::get('getListMenuTiki', [CrawlProductController::class, 'getListMenuTiki']
 Route::get('getListProductTiki/{category}/{urlKey}/{page}/{limit}', [CrawlProductController::class, 'getListProductTiki'])->name('getListProductTiki');
 Route::get('getDetailProductTiki/{id}', [CrawlProductController::class,'getDetailProductTiki'])->name('getDetailProductTiki');
 Route::get('crawlProductTiki/{category}/{urlKey}/{totalPage}/{categoryReal}', [CrawlProductController::class,'crawlProductTiki'])->name('crawlProductTiki');
+Route::get('search', [ProductController::class, 'search'])->name('search');
+
+
+Route::prefix('dashboard/seller')->middleware('is_seller')->name('dashboard')->group(function () {
+    Route::get('/', [DashBoardController::class, 'index'])->name('-index');
+    Route::get('/chat', [DashBoardController::class, 'chat'])->name('-chat');
+    Route::get('/chat/list', [UsersChatController::class, 'listChatSeller'])->name('-list-chat-user');
+    Route::post('/chat/list/detail', [UsersChatController::class, 'listDetailChatUser'])->name('-list-chat-detail');
+    Route::post('/chat/send', [UsersChatController::class, 'sendChatSeller'])->name('-send-chat');
+
+});
 
 Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('/', [UserController::class, 'infoUser'])->name('-info');
@@ -63,7 +76,11 @@ Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::post('order/review', [ProductReviewsController::class, 'addReview'])->name('-review-import');
     //Users Favourite
     Route::post('product/favourite', [ProductController::class, 'addFavourite'])->name('-product-favourite');
-
+    //Users Chat
+    Route::post('chat/default', [UsersChatController::class, 'addMsgDefault'])->name('-send-msg-default');
+    Route::get('chat/list', [UsersChatController::class, 'listChatUser'])->name('-list-chat-user');
+    Route::post('chat/detail', [UsersChatController::class, 'listChat'])->name('-chat-detail');
+    Route::post('send/chat', [UsersChatController::class, 'sendChatUser'])->name('-send-chat');
 });
 
 Route::prefix('auth')->name('auth')->group(function () {

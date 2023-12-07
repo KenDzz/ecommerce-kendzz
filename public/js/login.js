@@ -217,11 +217,7 @@ $("#btn-login").click(function () {
                 if (data["status"] == "true") {
                     window.location.href = "/";
                 } else {
-                    Notiflix.Report.failure(
-                        "Thông báo",
-                        data["message"],
-                        "Đồng ý"
-                    );
+                    Notiflix.Report.failure("Thông báo",data["content"],"Đồng ý");
                 }
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {

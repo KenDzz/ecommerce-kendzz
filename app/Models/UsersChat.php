@@ -15,7 +15,8 @@ class UsersChat extends Model
         'senderID',
         'receiverID',
         'message',
-        'product_id'
+        'product_id',
+        'user_type',
     ];
 
 }

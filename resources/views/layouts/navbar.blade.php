@@ -74,31 +74,29 @@
                   <img src="{{ url('images/logo/logo.svg') }}" alt="Anon's logo" width="120" height="36">
               </a>
 
-              <div class="header-search-container">
-
-                  <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
-
-                  <button class="search-btn">
-                      <ion-icon name="search-outline"></ion-icon>
-                  </button>
-
-              </div>
+              <form action="{{ route('search') }}" method="GET" class="header-search-container">
+                    <input type="search" name="search" class="search-field"
+                          placeholder="Enter your product name...">
+                    <button class="search-btn">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </button>
+              </form>
 
               <div class="header-user-actions">
 
                   @if (Auth::check())
-                    @php
-                        $user = Auth::user();
-                        $name = $user->name;
-                        $displayedName = "Hi, ". strlen($name) > 10 ? substr($name, 0, 10) . '...' : $name;
-                    @endphp
+                      @php
+                          $user = Auth::user();
+                          $name = $user->name;
+                          $displayedName = 'Hi, ' . strlen($name) > 10 ? substr($name, 0, 10) . '...' : $name;
+                      @endphp
                       <div class="dropdown-menu">
                           <a id="dropdownAvatarNameButton" href="{{ route('user-info') }}"
                               class="flex items-center p-2 text-sm font-medium text-gray-900 rounded-full md:mr-0 ring-4 ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
                               type="button">
                               <span class="sr-only">Open user menu</span>
                               <ion-icon class="w-8 h-8 mr-2 rounded-full" name="person-outline"></ion-icon>
-                                {{$displayedName}}
+                              {{ $displayedName }}
                               <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                   fill="none" viewBox="0 0 10 6">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -112,7 +110,8 @@
 
                               <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                   <div class="font-medium ">{{ Auth::user()->name }}</div>
-                                  <div class="truncate">Số dư: {{ number_format( Auth::user()->money, 0, ',', '.') . ' đ' }}</div>
+                                  <div class="truncate">Số dư:
+                                      {{ number_format(Auth::user()->money, 0, ',', '.') . ' đ' }}</div>
                               </div>
                               <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                   <li>
@@ -193,18 +192,21 @@
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 15]) }}">Laptop - Máy Vi Tính - Linh kiện</a>
+                                  <a href="{{ route('category-product', ['id' => 15]) }}">Laptop - Máy Vi Tính - Linh
+                                      kiện</a>
                               </li>
 
                               <li class="panel-list-item">
-                                <a href="{{ route('category-product', ['id' => 16]) }}">Điện Thoại - Máy tính bảng</a>
-                                </li>
+                                  <a href="{{ route('category-product', ['id' => 16]) }}">Điện Thoại - Máy tính
+                                      bảng</a>
+                              </li>
                               <li class="panel-list-item">
                                   <a href="{{ route('category-product', ['id' => 22]) }}">Máy Ảnh - Máy Quay Phim</a>
                               </li>
 
                               <li class="panel-list-item">
-                                  <a href="{{ route('category-product', ['id' => 21]) }}">Thiết Bị Số - Phụ Kiện Số</a>
+                                  <a href="{{ route('category-product', ['id' => 21]) }}">Thiết Bị Số - Phụ Kiện
+                                      Số</a>
                               </li>
 
                               <li class="panel-list-item">
@@ -231,11 +233,11 @@
                               </li>
 
                               <li class="panel-list-item">
-                                    <a href="{{ route('category-product', ['id' => 7]) }}">Phụ kiện thời trang</a>
-                                </li>
-                                <li class="panel-list-item">
-                                    <a href="{{ route('category-product', ['id' => 8]) }}">Đồng hồ và Trang sức</a>
-                                </li>
+                                  <a href="{{ route('category-product', ['id' => 7]) }}">Phụ kiện thời trang</a>
+                              </li>
+                              <li class="panel-list-item">
+                                  <a href="{{ route('category-product', ['id' => 8]) }}">Đồng hồ và Trang sức</a>
+                              </li>
                               <li class="panel-list-item">
                                   <a href="#">
                                       <img src="{{ url('images/mens-banner.jpg') }}" alt="men's fashion"
@@ -334,7 +336,8 @@
                   </li>
 
                   <li class="menu-category">
-                      <a href="{{ route('category-product', ['id' => 23]) }}" class="menu-title">Đồ Chơi - Mẹ & Bé</a>
+                      <a href="{{ route('category-product', ['id' => 23]) }}" class="menu-title">Đồ Chơi - Mẹ &
+                          Bé</a>
                   </li>
 
                   <li class="menu-category">

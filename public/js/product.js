@@ -35,20 +35,9 @@ $(document).ready(function () {
         }
     });
 
-    $(".btn-sender-chat").click(function () {
-        event.preventDefault();
-        var sellerID = $(this).attr("data-seller-id");
-        console.log(sellerID);
-    });
+    
 
 
-    $("#open-chat").click(function () {
-        $("#form-chat").toggleClass("hidden-important");
-    });
-
-    $("#btn-hidden-chat").click(function () {
-        $("#form-chat").toggleClass("hidden-important");
-    });
 
     //Product Review
     $(".btn-open-product-review").click(function () {
@@ -77,6 +66,8 @@ $(document).ready(function () {
     $(".btn-pay-cart").click(function () {
         pay();
     });
+
+
 
     $(".action-btn.btn-favourite").click(function() {
         reloadFavourite();
@@ -251,6 +242,9 @@ $(document).ready(function () {
         }
         addCart(id, quantity, category, size);
     });
+
+
+
 
     function reloadFavourite() {
         $.ajax({

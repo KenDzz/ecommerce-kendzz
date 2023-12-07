@@ -31,6 +31,15 @@ class ProductController extends Controller
     }
 
 
+    public function search(Request $request, Product $product){
+        $checkInfo = $request->validate([
+            'search' => ['required', 'string', 'max:255'],
+        ]);
+        $productSearch = $product::where('name', 'LIKE', '%' . $checkInfo['search'] . '%')->paginate(12);
+        $title = "Tìm kiếm - ".$checkInfo['search'];
+        return view("product.search", ["products" => $productSearch, "title" => $title]);
+    }
+
     public function detailProduct($id, $slug){
         $product = Product::where('id',$id)->where('slug',$slug)->firstOrFail();
         $productTypes = $product->productType;

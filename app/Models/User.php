@@ -56,4 +56,8 @@ class User extends Authenticatable
         return $this->hasOne(ProductReviews::class, 'user_id');
     }
 
+    public function seller(){
+        return $this->hasOne(Seller::class, 'user_id');
+    }
+
 }
