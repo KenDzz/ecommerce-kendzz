@@ -22,10 +22,16 @@ class UsersOrder extends Model
         'describes',
         'quantity',
         'url_img',
-        'is_review'
+        'is_review',
+        'coupons_id'
     ];
 
     public function products(){
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function Coupons(){
+        return $this->belongsTo(Coupons::class, 'coupons_id');
+    }
+
 }

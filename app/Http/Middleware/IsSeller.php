@@ -16,7 +16,7 @@ class IsSeller
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && !Auth::user()->seller) {
+        if (!Auth::check() || !Auth::user()->seller) {
             return redirect()->route('index');
         }
 

@@ -45,6 +45,19 @@
                                             {{ number_format($data->total_price, 0, ',', '.') . ' đ' }}</p>
                                         <p class="mt-1 font-medium text-gray-900">Tiền vận chuyển:
                                             {{ number_format($data->cost_shipping, 0, ',', '.') . ' đ' }}</p>
+                                        @if ($data->Coupons)
+                                            @php
+                                                $reducePrice = 0;
+                                                if($data->Coupons->type == 0){
+                                                    $reducePrice = $data->cost_shipping * ($data->Coupons->discount / 100);
+                                                }else {
+                                                    $reducePrice = ($data->total_price) * ($data->Coupons->discount / 100);
+                                                }
+                                            @endphp
+                                            <p class="mt-1 font-medium text-gray-900">{{ $data->Coupons->name }} (-{{$data->Coupons->discount}}%):
+                                            -{{ number_format($reducePrice, 0, ',', '.') . ' đ'}}
+                                            </p>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="mt-6 space-y-4 sm:mt-0 sm:ml-6 sm:flex-none sm:w-40">
@@ -68,6 +81,9 @@
                 </section>
 
                 <!-- More orders... -->
+            </div>
+            <div class="mt-3">
+                {!! $datas->links('vendor.pagination.tailwind') !!}
             </div>
         </div>
     </div>

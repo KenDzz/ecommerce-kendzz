@@ -153,6 +153,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 <script src="{{ url('js/star-rating.min.js') }}"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
 <script type="module" src="{{ url('js/module.js') }}"></script>
 <script>
     var starrating = new StarRating('.star-rating', {

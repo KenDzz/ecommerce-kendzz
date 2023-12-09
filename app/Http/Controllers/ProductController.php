@@ -85,20 +85,22 @@ class ProductController extends Controller
     }
 
     public function reloadFavourite(){
-        $findF = UsersFavourite::where('user_id', Auth::user()->id)->get();
-        session()->put('favourite', []);
-        $Favourite = session()->get('favourite', []);
-        foreach ($findF as $key => $value) {
-            $productMedia = $value->products->productMedia->first();
-            $image = $productMedia->url;
-            $Favourite[$value->id] = [
-                "id" => $value->product_id,
-                "name" => $value->products->name,
-                "link" => route('detail-product', ['slug'=>urlencode($value->products->slug), 'id' => $value->products->id]),
-                "image" => $image
-            ];
+        if(Auth::check()){
+            $findF = UsersFavourite::where('user_id', Auth::user()->id)->get();
+            session()->put('favourite', []);
+            $Favourite = session()->get('favourite', []);
+            foreach ($findF as $key => $value) {
+                $productMedia = $value->products->productMedia->first();
+                $image = $productMedia->url;
+                $Favourite[$value->id] = [
+                    "id" => $value->product_id,
+                    "name" => $value->products->name,
+                    "link" => route('detail-product', ['slug'=>urlencode($value->products->slug), 'id' => $value->products->id]),
+                    "image" => $image
+                ];
+            }
+            session()->put('favourite', $Favourite);
         }
-        session()->put('favourite', $Favourite);
         return response()->json(['favourite' => session('favourite')]);
     }
 

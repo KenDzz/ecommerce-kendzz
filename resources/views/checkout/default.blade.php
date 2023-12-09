@@ -159,7 +159,7 @@
 
                             <div class="flex items-center justify-between mt-6">
                                 <p class="text-sm font-medium text-gray-900">Mã giảm giá</p>
-                                <input type="text" name="credit-cvc" class="flex-shrink-0 w-3/6 px-2 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"/>
+                                <input type="text" id="coupons-text" class="flex-shrink-0 w-3/6 px-2 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" disabled/>
                             </div>
                             <!-- Total -->
                             @php $total = 0 @endphp
@@ -171,12 +171,31 @@
                             <div class="py-2 mt-6 border-t border-b">
                                 <div class="flex items-center justify-between">
                                     <p class="text-sm font-medium text-gray-900">Subtotal</p>
-                                    <p class="font-semibold text-gray-900">{{ number_format($total, 0, ',', '.') . ' đ' }}</p>
+                                    <p class="font-semibold text-gray-900 price-product" attr-price="{{$total}}">{{ number_format($total, 0, ',', '.') . ' đ' }}</p>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <p class="text-sm font-medium text-gray-900">Shipping</p>
                                     <p class="font-semibold text-gray-900 text-cost-shipping"></p>
                                 </div>
+                            </div>
+                            <div class="hidden py-2 mt-2 border-b form-coupons">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-gray-900 title-coupons " aria-describedby="tooltip">Coupons</p>
+                                    <p class="font-semibold text-gray-900 text-coupons"></p>
+                                </div>
+
+                            </div>
+                            <div id="tooltip" role="tooltip" class="">
+                                <div class="p-2 border-b">
+                                    <p class="title-tooltip"></p>
+                                </div>
+                                <div class="p-2 border-b">
+                                    <p class="desc-tooltip"></p>
+                                </div>
+                                <div class="flex p-2 flex-nowrap">
+                                    <div class="vaildate-coupons"></div>
+                                </div>
+                                <div id="arrow" data-popper-arrow></div>
                             </div>
                             <div class="flex items-center justify-between mt-6">
                                 <p class="text-sm font-medium text-gray-900">Total</p>

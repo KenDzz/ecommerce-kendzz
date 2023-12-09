@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\BuyProductEvent;
+use App\Models\Coupons;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\UsersOrder;
@@ -15,11 +16,13 @@ class CheckoutController extends Controller
 {
     private $userController;
     private $productController;
+    private $couponsController;
 
-    public function __construct(UserController $userController, ProductController $productController)
+    public function __construct(UserController $userController, ProductController $productController, CouponsController $couponsController)
     {
         $this->userController = $userController;
         $this->productController = $productController;
+        $this->couponsController = $couponsController;
     }
 
     public function index(){
@@ -27,7 +30,18 @@ class CheckoutController extends Controller
         return view('checkout.default', ['dataShipping' => $dataShipping]);
     }
 
-    public function addOrder(){
+    public function addOrder($coupons){
+        if($coupons != ""){
+            $Coup = Coupons::where('id', $coupons)->first();
+            $Coup->is_use = true;
+            if($Coup->count > 0){
+                $Coup->count -= 1;
+                if($Coup->count == 0){
+                    $Coup->is_exit = true;
+                }
+            }
+            $Coup->save();
+        }
         $dataPrice = $this->getPriceShippingSPX();
         $dataShipping = UsersShippingAddresses::where("user_id", auth()->user()->id)->where("is_used", 1)->first();
         $index = 0;
@@ -39,6 +53,7 @@ class CheckoutController extends Controller
             $order->quantity = $details['quantity'];
             $order->users_shipping_address_id = $dataShipping->id;
             $order->cost_shipping =  $dataPrice[$index];
+            $order->coupons_id = $coupons;
             $order->total_price = $details['price'] * $details['quantity'];
             $order->transporters = "SPX";
             $order->url_img = $details['image'];
@@ -49,9 +64,27 @@ class CheckoutController extends Controller
         }
     }
 
-    public function pay(){
-        $moneyShip = $this->getTotalPriceShippingSPXJson();
+    public function pay(Request $request){
+        $checkData = $request->validate([
+            'coupons' => ['nullable', 'string', 'max:50'],
+        ]);
+
+    $CouponShip = 0;
+        $CouponPrice = 0;
+$moneyShip = $this->getTotalPriceShippingSPXJson();
         $totalCart = $this->getTotalCart();
+        if(isset($checkData['coupons'])){
+            $Coupons = $this->couponsController->checkCoupons($checkData['coupons']);
+            if($Coupons['status'] == true){
+                if($Coupons['data']['type'] == 0){
+                    $CouponShip = $moneyShip * ($Coupons['data']['discount'] / 100);
+                    $moneyShip -= $CouponShip;
+                }else{
+                    $CouponPrice = $totalCart * ($Coupons['data']['discount'] / 100);
+                    $totalCart -= $CouponPrice;
+                }
+            }
+        }
         $data['status'] = false;
         DB::beginTransaction();
 
@@ -60,7 +93,7 @@ class CheckoutController extends Controller
                 $user = Auth::user();
                 $user->money -= ($moneyShip + $totalCart);
                 if($user->save()){
-                    $this->addOrder();
+                    $this->addOrder($checkData['coupons'] ?? "");
                     $this->productController->removeToCartAll();
                     $data['status'] = true;
                     DB::commit();

@@ -35,15 +35,11 @@ $(document).ready(function () {
         }
     });
 
-    
-
-
-
     //Product Review
     $(".btn-open-product-review").click(function () {
-        if(!$(this).hasClass("cursor-not-allowed")){
-            $('#data-product-id').val($(this).attr("data-product-id"));
-            $('#data-order-id').val($(this).attr("data-order-id"));
+        if (!$(this).hasClass("cursor-not-allowed")) {
+            $("#data-product-id").val($(this).attr("data-product-id"));
+            $("#data-order-id").val($(this).attr("data-order-id"));
             $("#product-review-modal").toggleClass("hidden");
         }
     });
@@ -67,41 +63,46 @@ $(document).ready(function () {
         pay();
     });
 
-
-
-    $(".action-btn.btn-favourite").click(function() {
+    $(".action-btn.btn-favourite").click(function () {
         reloadFavourite();
         $(".form-favourite").toggleClass("hidden");
     });
 
-    $(".btn-hidden-favourite").click(function() {
+    $(".btn-hidden-favourite").click(function () {
         $(".form-favourite").toggleClass("hidden");
     });
 
-
     $(".btn-add-address").click(function () {
-        var name = $('#name-modal-address').val();
-        var phone = $('#phone-modal-address').val();
-        var province = $('#province-modal-address').val();
-        var city = $('#city-modal-address').val();
-        var district = $('#district-modal-address').val();
-        var address = $('.info-modal-address').val();
-        var postalcode = $('#postal-modal-address').val();
-        var note = $('#note-modal-address').val();
-        if(checkAddAdress(name,phone,province,city,district,address)){
-            addAdress(name,phone,province,city,district,address,postalcode,note);
-        }else{
+        var name = $("#name-modal-address").val();
+        var phone = $("#phone-modal-address").val();
+        var province = $("#province-modal-address").val();
+        var city = $("#city-modal-address").val();
+        var district = $("#district-modal-address").val();
+        var address = $(".info-modal-address").val();
+        var postalcode = $("#postal-modal-address").val();
+        var note = $("#note-modal-address").val();
+        if (checkAddAdress(name, phone, province, city, district, address)) {
+            addAdress(
+                name,
+                phone,
+                province,
+                city,
+                district,
+                address,
+                postalcode,
+                note
+            );
+        } else {
             Notiflix.Notify.failure("Vui lòng đầy đủ thông tin!");
         }
     });
 
-
-    $('.checkbox-shipping-address').on('change', function() {
+    $(".checkbox-shipping-address").on("change", function () {
         // Handle the change event here
-        $('.checkbox-shipping-address').not(this).prop('checked', false);
-        var isChecked = $(this).prop('checked');
-        console.log('Checkbox state changed: ', isChecked);
-        defaultShipAddress($(this).attr('attr-id'),isChecked)
+        $(".checkbox-shipping-address").not(this).prop("checked", false);
+        var isChecked = $(this).prop("checked");
+        console.log("Checkbox state changed: ", isChecked);
+        defaultShipAddress($(this).attr("attr-id"), isChecked);
     });
 
     $(document).on("change", "#province-modal-address", function () {
@@ -116,9 +117,12 @@ $(document).ready(function () {
         getDistrict(code);
     });
 
-    $('#price').on('keydown', function() {
+    $("#price").on("keydown", function () {
         var price = $(this).val();
-        var newPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        var newPrice = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(price);
         $(this).val(newPrice);
     });
 
@@ -127,10 +131,21 @@ $(document).ready(function () {
         data: {
             src: async (query) => {
                 try {
-                    const province = $("#province-modal-address option:selected").val();
+                    const province = $(
+                        "#province-modal-address option:selected"
+                    ).val();
                     const city = $("#city-modal-address option:selected").val();
-                    const district = $("#district-modal-address option:selected").val();
-                    if ((province && province != null) && (city && city != null) && (district && district != null)) {
+                    const district = $(
+                        "#district-modal-address option:selected"
+                    ).val();
+                    if (
+                        province &&
+                        province != null &&
+                        city &&
+                        city != null &&
+                        district &&
+                        district != null
+                    ) {
                         const source = await fetch(
                             `/user/shipping/addresses/${query}/${province}/${city}/${district}`
                         );
@@ -152,11 +167,10 @@ $(document).ready(function () {
                     const selection = event.detail.selection.value;
                     autoCompleteJS.input.value = selection;
                     console.log("selection!");
-
                 },
                 focus: (event) => {
                     console.log("Input Field in focus!");
-                  }
+                },
             },
         },
     });
@@ -168,25 +182,27 @@ $(document).ready(function () {
             method: "post",
             dataType: "json",
             data: {
-                id: id
+                id: id,
             },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {},
             complete: function () {},
-            error :function( data ) {
+            error: function (data) {
                 var errors = $.parseJSON(data.responseText);
-                Notiflix.Notify.failure(errors['message']);
-
-            }
+                Notiflix.Notify.failure(errors["message"]);
+            },
         })
             .done(function (data) {
-                if(data['status'] == "add"){
-                    $('.icon-favourite-product-'+id).addClass('color-icon');                    Notiflix.Notify.success("Thêm thành công!");
-
-                }else{
-                    $('.icon-favourite-product-'+id).removeClass('color-icon');                    Notiflix.Notify.success("Thêm thành công!");
+                if (data["status"] == "add") {
+                    $(".icon-favourite-product-" + id).addClass("color-icon");
+                    Notiflix.Notify.success("Thêm thành công!");
+                } else {
+                    $(".icon-favourite-product-" + id).removeClass(
+                        "color-icon"
+                    );
+                    Notiflix.Notify.success("Thêm thành công!");
                     Notiflix.Notify.success("Hủy thành công!");
                 }
                 reloadFavourite();
@@ -205,12 +221,12 @@ $(document).ready(function () {
             },
             beforeSend: function () {},
             complete: function () {},
-            error :function( data ) {
-                if(data.status === 422 ){
+            error: function (data) {
+                if (data.status === 422) {
                     var errors = $.parseJSON(data.responseText);
-                    Notiflix.Notify.failure(errors['message']);
+                    Notiflix.Notify.failure(errors["message"]);
                 }
-            }
+            },
         })
             .done(function (data) {
                 location.reload();
@@ -218,8 +234,110 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     });
 
+    $(".btn-buy-product").on("click", function () {
+        var result = addCartClick();
+        if (result) {
+            setTimeout(() => {
+                var url = "/user/checkout";
+                $(location).attr("href", url);
+            }, 1000);
+        }
+    });
+
+    $("#coupons-text").on("keyup", function () {
+        checkCoupons($(this).val());
+    });
+
+    function checkCoupons(id) {
+        $.ajax({
+            url: "/checkCoupons",
+            method: "post",
+            dataType: "json",
+            data: {
+                id: id,
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+        })
+            .done(function (data) {
+                var cost = $(".text-cost-shipping").attr("attr-price");
+                var totalPrice = $(".text-total-price-checkout").attr(
+                    "attr-price"
+                );
+                var priceProduct = $(".price-product").attr(
+                    "attr-price"
+                );
+
+                if (data.status == true) {
+                    $(".title-tooltip").text(data.data.name);
+                    $(".desc-tooltip").text(data.data.describes);
+                    $(".vaildate-coupons").text(" "+data.validate);
+                    if (data.data.type == 0) {
+                        $(".form-coupons").removeClass("hidden");
+                        var costReduce = cost * (data.data.discount / 100);
+                        totalPrice -= costReduce;
+                        $(".text-total-price-checkout").html(
+                            totalPrice
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"
+                        );
+                        $(".title-coupons").html("");
+                        $(".title-coupons").html(
+                            data.data.name + " (-" + data.data.discount + "%)"
+                        );
+                        $(".text-coupons").html("");
+                        $(".text-coupons").html(
+                            "-" +
+                                costReduce
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+                                "đ" +
+                                ""
+                        );
+                    }else{
+                        $(".form-coupons").removeClass("hidden");
+                        var costReduce = priceProduct * (data.data.discount / 100);
+                        totalPrice -= costReduce;
+                        $(".text-total-price-checkout").html(
+                            totalPrice
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"
+                        );
+                        $(".title-coupons").html("");
+                        $(".title-coupons").html(
+                            data.data.name + " (-" + data.data.discount + "%)"
+                        );
+                        $(".text-coupons").html("");
+                        $(".text-coupons").html(
+                            "-" +
+                                costReduce
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+                                "đ" +
+                                ""
+                        );
+                    }
+                } else {
+                    $(".form-coupons").addClass("hidden");
+                    $(".text-total-price-checkout").html(
+                        totalPrice
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"
+                    );
+                    Notiflix.Notify.failure("Mã giảm giá không tồn tại!");
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
 
     $(".btn-add-product-to-cart").on("click", function () {
+        addCartClick();
+    });
+
+    function addCartClick() {
         var id = $(".product-content").attr("productId");
         var quantity = $(".custom-input-number-product").val();
         var size = $("input[type=radio][name=size-choice]:checked").val();
@@ -228,23 +346,22 @@ $(document).ready(function () {
         ).val();
         if (quantity < 1) {
             Notiflix.Notify.failure("Số lượng sản phẩm phải lớn hơn 0");
-            return;
+            return false;
         }
 
         if ($(".choose-category").length > 0 && category == null) {
             Notiflix.Notify.failure("Vui lòng chọn loại sản phẩm!");
-            return;
+            return false;
         }
 
         if ($(".list-product-size").length > 0 && size == null) {
             Notiflix.Notify.failure("Vui lòng kích cở sản phẩm!");
-            return;
+            return false;
         }
+        console.log("hi");
         addCart(id, quantity, category, size);
-    });
-
-
-
+        return true;
+    }
 
     function reloadFavourite() {
         $.ajax({
@@ -257,18 +374,29 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
         })
-        .done(function (data) {
-            $(".list-product-favourite").html("");
-            var data = data["favourite"];
-            var totalPrice = 0;
-            $.each(data, function (i, item) {
-                $(".list-product-favourite").append('<li class="flex py-6 li-product-cart" data-id="'+ i +'"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="'+data[i].image+'" alt="" class="object-cover object-center w-24 h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="'+data[i].link+'">'+data[i].name+'</a></h3></div></div><div class="flex items-end justify-between flex-1 text-sm"><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-favourite" data-product-id="'+ data[i].id +'"">Xóa</button></div></div></div></li>');
-            });
-            $(".count-favourite").html(Object.keys(data).length);
-        })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {});
+            .done(function (data) {
+                $(".list-product-favourite").html("");
+                var data = data["favourite"];
+                var totalPrice = 0;
+                $.each(data, function (i, item) {
+                    $(".list-product-favourite").append(
+                        '<li class="flex py-6 li-product-cart" data-id="' +
+                            i +
+                            '"><div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md"><img src="' +
+                            data[i].image +
+                            '" alt="" class="object-cover object-center w-24 h-full"></div><div class="flex flex-col flex-1 ml-4"><div><div class="flex justify-between text-base font-medium text-gray-900"><h3><a href="' +
+                            data[i].link +
+                            '">' +
+                            data[i].name +
+                            '</a></h3></div></div><div class="flex items-end justify-between flex-1 text-sm"><div class="flex"><button type="button" class="font-medium text-indigo-600 hover:text-indigo-500 btn-delete-product-favourite" data-product-id="' +
+                            data[i].id +
+                            '"">Xóa</button></div></div></div></li>'
+                    );
+                });
+                $(".count-favourite").html(Object.keys(data).length);
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
-
 
     function reloadCart() {
         $.ajax({
@@ -325,7 +453,9 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-    function pay(){
+    function pay() {
+        var coupons = $("#coupons-text").val();
+        console.log(coupons);
         $.ajax({
             url: "/user/pay",
             method: "post",
@@ -334,6 +464,7 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             data: {
+                coupons: coupons,
             },
             beforeSend: function () {
                 Notiflix.Block.standard(".showcase-container");
@@ -343,11 +474,11 @@ $(document).ready(function () {
             },
         })
             .done(function (data) {
-                if (data['status'] == false) {
-                    Notiflix.Notify.failure(data['content']);
+                if (data["status"] == false) {
+                    Notiflix.Notify.failure(data["content"]);
                     return;
                 }
-                reloadCart()
+                reloadCart();
                 $(".form-payment").addClass("hidden");
                 $(".btn-pay-cart").addClass("hidden");
                 $(".payment-susses").removeClass("hidden");
@@ -357,18 +488,18 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-
     function getCostShipping() {
-        if ($('.text-cost-shipping').length > 0) {
+        if ($(".text-cost-shipping").length > 0) {
             $.ajax({
                 url: "/user/checkout/cost/shipping",
                 method: "post",
                 dataType: "json",
                 headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
-                data: {
-                },
+                data: {},
                 beforeSend: function () {
                     Notiflix.Block.standard(".form-choose-shipping");
                 },
@@ -377,17 +508,32 @@ $(document).ready(function () {
                 },
             })
                 .done(function (data) {
-                    $('.text-cost-shipping').html(data['price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ");
-                    var totalPrice = parseInt($('.text-total-price-checkout').attr('attr-price'));
-                    totalPrice += parseInt(data['price']);
-                    $('.text-total-price-checkout').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ");
+                    $(".text-cost-shipping").html(
+                        data["price"]
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"
+                    );
+                    $(".text-cost-shipping").attr("attr-price", data["price"]);
+                    var totalPrice = parseInt(
+                        $(".text-total-price-checkout").attr("attr-price")
+                    );
+                    totalPrice += parseInt(data["price"]);
+                    $(".text-total-price-checkout").attr(
+                        "attr-price",
+                        totalPrice
+                    );
+                    $(".text-total-price-checkout").html(
+                        totalPrice
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"
+                    );
+                    $("#coupons-text").prop("disabled", false);
                 })
                 .fail(function (jqXHR, ajaxOptions, thrownError) {});
         }
     }
 
-
-    function defaultShipAddress(id,status) {
+    function defaultShipAddress(id, status) {
         status = status ? 1 : 0;
         $.ajax({
             url: "/user/shipping/add/addresses/default",
@@ -403,8 +549,7 @@ $(document).ready(function () {
             beforeSend: function () {},
             complete: function () {},
         })
-            .done(function (data) {
-            })
+            .done(function (data) {})
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
@@ -430,42 +575,54 @@ $(document).ready(function () {
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-
     function removeFavourite(id) {
         $.ajax({
             url: "/user/product/favourite",
             method: "post",
             dataType: "json",
             data: {
-                id: id
+                id: id,
             },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {},
             complete: function () {},
-            error :function( data ) {
+            error: function (data) {
                 var errors = $.parseJSON(data.responseText);
-                Notiflix.Notify.failure(errors['message']);
-
-            }
+                Notiflix.Notify.failure(errors["message"]);
+            },
         })
             .done(function (data) {
-
                 reloadFavourite();
-
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-    function checkAddAdress(name,phone,province,city,district,address){
-        if(name != null && phone != null && province != null && city != null && district != null && address != null){
+    function checkAddAdress(name, phone, province, city, district, address) {
+        if (
+            name != null &&
+            phone != null &&
+            province != null &&
+            city != null &&
+            district != null &&
+            address != null
+        ) {
             return true;
         }
         return false;
     }
 
-    function addAdress(name,phone,province,city,district,address,postalcode,note) {
+    function addAdress(
+        name,
+        phone,
+        province,
+        city,
+        district,
+        address,
+        postalcode,
+        note
+    ) {
         $.ajax({
             url: "/user/shipping/add/addresses",
             method: "post",
@@ -485,36 +642,55 @@ $(document).ready(function () {
             },
             beforeSend: function () {
                 Notiflix.Block.standard(".modal-add-address");
-
             },
             complete: function () {
                 Notiflix.Block.remove(".modal-add-address");
-
             },
         })
             .done(function (data) {
-                if(data["status"] == true){
-                    loadUiShippingAdress(data['data']);
-                    $('.form-add-address').trigger("reset");
+                if (data["status"] == true) {
+                    loadUiShippingAdress(data["data"]);
+                    $(".form-add-address").trigger("reset");
                     $("#address-modal").toggleClass("hidden");
-                }else{
+                } else {
                     Notiflix.Notify.failure("Lỗi hệ thống!");
                 }
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {});
     }
 
-    function loadUiShippingAdress(data){
-        $(".tbody-shipping-adress").html('');
-        data.forEach(element => {
-            var IsUsed = '<div class="h-2.5 w-2.5 rounded-full bg-red-500"></div>';
-            var isChecked = '';
-            if(element['is_used']){
-                var IsUsed = '<div class="h-2.5 w-2.5 rounded-full bg-green-500">';
-                var isChecked = 'checked';
-
+    function loadUiShippingAdress(data) {
+        $(".tbody-shipping-adress").html("");
+        data.forEach((element) => {
+            var IsUsed =
+                '<div class="h-2.5 w-2.5 rounded-full bg-red-500"></div>';
+            var isChecked = "";
+            if (element["is_used"]) {
+                var IsUsed =
+                    '<div class="h-2.5 w-2.5 rounded-full bg-green-500">';
+                var isChecked = "checked";
             }
-            $(".tbody-shipping-adress").append('<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"><div class="pl-3"><div class="text-base font-semibold">'+element['name']+'</div><div class="font-normal text-gray-500">+84 '+element['phone']+'</div></div>'+IsUsed+'</th><td class="px-6 py-4">'+element['province']+', '+element['city']+', '+element['district']+'</td><td class="px-6 py-4">'+element['address']+'</td><td class="px-6 py-4"></td><td class="px-6 py-4"><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" value="" attr-id="'+element['id']+'" class="sr-only peer checkbox-shipping-address" '+isChecked+'><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-pink-600"></div></label></td></tr>');
+            $(".tbody-shipping-adress").append(
+                '<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"><div class="pl-3"><div class="text-base font-semibold">' +
+                    element["name"] +
+                    '</div><div class="font-normal text-gray-500">+84 ' +
+                    element["phone"] +
+                    "</div></div>" +
+                    IsUsed +
+                    '</th><td class="px-6 py-4">' +
+                    element["province"] +
+                    ", " +
+                    element["city"] +
+                    ", " +
+                    element["district"] +
+                    '</td><td class="px-6 py-4">' +
+                    element["address"] +
+                    '</td><td class="px-6 py-4"></td><td class="px-6 py-4"><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" value="" attr-id="' +
+                    element["id"] +
+                    '" class="sr-only peer checkbox-shipping-address" ' +
+                    isChecked +
+                    '><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-pink-600"></div></label></td></tr>'
+            );
         });
     }
 
@@ -690,7 +866,6 @@ $(document).ready(function () {
     // Gọi hàm runAjax() để bắt đầu quá trình
     runAjax();
 
-
     var TomSelectProvince;
     var TomSelectCity;
     var TomSelectDistrict;
@@ -705,7 +880,9 @@ $(document).ready(function () {
             success: function (data) {
                 $("#province-modal-address").html("");
                 data.forEach((element) => {
-                    var name = element.name.replace("Tỉnh ", "").replace("Thành phố ", "");
+                    var name = element.name
+                        .replace("Tỉnh ", "")
+                        .replace("Thành phố ", "");
                     $("#province-modal-address").append(
                         '<option value="' +
                             name +
@@ -716,20 +893,22 @@ $(document).ready(function () {
                             "</option>"
                     );
                 });
-                if(TomSelectProvince){
+                if (TomSelectProvince) {
                     TomSelectProvince.clear(); // unselect previously selected elements
                     TomSelectProvince.clearOptions(); // remove existing options
                     TomSelectProvince.sync(); // synchronise with the underlying SELECT
-                }else{
-                    TomSelectProvince =  new TomSelect("#province-modal-address", {
-                        create: true,
-                        sortField: {
-                            field: "text",
-                            direction: "asc",
-                        },
-                    });
+                } else {
+                    TomSelectProvince = new TomSelect(
+                        "#province-modal-address",
+                        {
+                            create: true,
+                            sortField: {
+                                field: "text",
+                                direction: "asc",
+                            },
+                        }
+                    );
                 }
-
             },
             error: function (xhr, status, error) {},
         });
@@ -756,12 +935,12 @@ $(document).ready(function () {
                             "</option>"
                     );
                 });
-                if(TomSelectCity){
+                if (TomSelectCity) {
                     TomSelectCity.clear(); // unselect previously selected elements
                     TomSelectCity.clearOptions(); // remove existing options
                     TomSelectCity.sync(); // synchronise with the underlying SELECT
-                }else{
-                    TomSelectCity =  new TomSelect("#city-modal-address", {
+                } else {
+                    TomSelectCity = new TomSelect("#city-modal-address", {
                         create: true,
                         sortField: {
                             field: "text",
@@ -795,30 +974,31 @@ $(document).ready(function () {
                             "</option>"
                     );
                 });
-                if(TomSelectDistrict){
+                if (TomSelectDistrict) {
                     TomSelectDistrict.clear(); // unselect previously selected elements
                     TomSelectDistrict.clearOptions(); // remove existing options
                     TomSelectDistrict.sync(); // synchronise with the underlying SELECT
-                }else{
-                    TomSelectDistrict =  new TomSelect("#district-modal-address", {
-                        create: true,
-                        sortField: {
-                            field: "text",
-                            direction: "asc",
-                        },
-                    });
+                } else {
+                    TomSelectDistrict = new TomSelect(
+                        "#district-modal-address",
+                        {
+                            create: true,
+                            sortField: {
+                                field: "text",
+                                direction: "asc",
+                            },
+                        }
+                    );
                 }
             },
             error: function (xhr, status, error) {},
         });
     }
-
 });
 
 const cartButton = document.querySelector(".action-btn.btn-cart");
 const cartSlideOver = document.querySelector(".form-cart");
 const closeCart = document.querySelector(".btn-hidden-cart");
-
 
 cartButton.addEventListener("click", () => {
     cartSlideOver.classList.toggle("hidden");
@@ -896,4 +1076,35 @@ decrementButtons.forEach((btn) => {
 
 incrementButtons.forEach((btn) => {
     btn.addEventListener("click", increment);
+});
+
+const button = document.querySelector('.title-coupons');
+const tooltip = document.querySelector('#tooltip');
+
+const popperInstance = Popper.createPopper(button, tooltip);
+
+function show() {
+    console.log("show");
+    tooltip.setAttribute("data-show", "");
+
+    // We need to tell Popper to update the tooltip position
+    // after we show the tooltip, otherwise it will be incorrect
+    popperInstance.update();
+}
+
+function hide() {
+    console.log("hide");
+
+    tooltip.removeAttribute("data-show");
+}
+
+const showEvents = ["mouseenter", "focus"];
+const hideEvents = ["mouseleave", "blur"];
+
+showEvents.forEach((event) => {
+    button.addEventListener(event, show);
+});
+
+hideEvents.forEach((event) => {
+    button.addEventListener(event, hide);
 });

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponsController;
 use App\Http\Controllers\CrawlProductController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\EmailController;
@@ -42,7 +43,7 @@ Route::get('getListProductTiki/{category}/{urlKey}/{page}/{limit}', [CrawlProduc
 Route::get('getDetailProductTiki/{id}', [CrawlProductController::class,'getDetailProductTiki'])->name('getDetailProductTiki');
 Route::get('crawlProductTiki/{category}/{urlKey}/{totalPage}/{categoryReal}', [CrawlProductController::class,'crawlProductTiki'])->name('crawlProductTiki');
 Route::get('search', [ProductController::class, 'search'])->name('search');
-
+Route::post('checkCoupons', [CouponsController::class, 'checkCouponsRequest'])->name('check-coupons');
 
 Route::prefix('dashboard/seller')->middleware('is_seller')->name('dashboard')->group(function () {
     Route::get('/', [DashBoardController::class, 'index'])->name('-index');
