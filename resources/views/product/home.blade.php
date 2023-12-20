@@ -14,7 +14,7 @@
       - CATEGORY
     -->
 
-    @include('home.category')
+    {{-- @include('home.category') --}}
 
 
 

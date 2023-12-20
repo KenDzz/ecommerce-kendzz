@@ -45,6 +45,11 @@ Route::get('crawlProductTiki/{category}/{urlKey}/{totalPage}/{categoryReal}', [C
 Route::get('search', [ProductController::class, 'search'])->name('search');
 Route::post('checkCoupons', [CouponsController::class, 'checkCouponsRequest'])->name('check-coupons');
 
+Route::get('provinces/depth/{id}', [CrawlProductController::class,'getProvinces'])->name('getProvinces');
+Route::get('city/depth/{id}', [CrawlProductController::class,'getCity'])->name('getCity');
+Route::get('district/depth/{id}', [CrawlProductController::class,'getDistrict'])->name('getDistrict');
+
+
 Route::prefix('dashboard/seller')->middleware('is_seller')->name('dashboard')->group(function () {
     Route::get('/', [DashBoardController::class, 'index'])->name('-index');
     Route::get('/chat', [DashBoardController::class, 'chat'])->name('-chat');

@@ -129,4 +129,5 @@ class Product extends Model  implements InteractWithRecommendation
         return $stars;
     }
 
+
 }

@@ -49,6 +49,39 @@ class CrawlProductController extends Controller
         return response()->json($resp);
     }
 
+    public function getProvinces($id){
+        $url = "https://provinces.open-api.vn/api/?depth=".$id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $resp = json_decode($output,true);
+        return response()->json($resp);
+    }
+
+    public function getCity($id){
+        $url = "https://provinces.open-api.vn/api/p/".$id."?depth=2";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $resp = json_decode($output,true);
+        return response()->json($resp);
+    }
+
+    public function getDistrict($id){
+        $url = "https://provinces.open-api.vn/api/d/".$id."?depth=2";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $resp = json_decode($output,true);
+        return response()->json($resp);
+    }
+
     public function crawlProductTiki($category, $urlKey, $totalPage, $categoryReal){
         $data = [];
         for($i = 1; $i <= $totalPage; $i++){

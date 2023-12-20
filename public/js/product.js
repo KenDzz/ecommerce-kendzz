@@ -35,6 +35,10 @@ $(document).ready(function () {
         }
     });
 
+    $("#btn-close-modal-address").click(function () {
+        $("#address-modal").toggleClass("hidden");
+    });
+
     //Product Review
     $(".btn-open-product-review").click(function () {
         if (!$(this).hasClass("cursor-not-allowed")) {
@@ -872,9 +876,13 @@ $(document).ready(function () {
     //Search Select
     function getProvince() {
         $.ajax({
-            url: "https://provinces.open-api.vn/api/?depth=1",
+            url: "/provinces/depth/1",
             method: "get",
             dataType: "json",
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type':'application/json'
+            },
             beforeSend: function () {},
             complete: function () {},
             success: function (data) {
@@ -916,7 +924,7 @@ $(document).ready(function () {
 
     function getCity(code) {
         $.ajax({
-            url: "https://provinces.open-api.vn/api/p/" + code + "?depth=2",
+            url: "/city/depth/" + code,
             method: "get",
             dataType: "json",
             beforeSend: function () {},
@@ -955,7 +963,7 @@ $(document).ready(function () {
 
     function getDistrict(code) {
         $.ajax({
-            url: "https://provinces.open-api.vn/api/d/" + code + "?depth=2",
+            url: "/district/depth/" + code,
             method: "get",
             dataType: "json",
             beforeSend: function () {},
