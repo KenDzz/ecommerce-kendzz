@@ -14,9 +14,11 @@ class ProductController extends Controller
 {
 
     private $homeController;
+    private $logController;
 
-    public function __construct(HomeController $homeController) {
+    public function __construct(HomeController $homeController, LogController $log) {
         $this->homeController = $homeController;
+        $this->logController = $log;
     }
 
     public function categoryProduct($id){
@@ -41,6 +43,7 @@ class ProductController extends Controller
     }
 
     public function detailProduct($id, $slug){
+        $this->logController->logClick($id);
         $product = Product::where('id',$id)->where('slug',$slug)->firstOrFail();
         $productTypes = $product->productType;
         $DataRecommendations = $product->Recommendations->where('order_column' ,'>', 0)->toArray();

@@ -92,6 +92,11 @@ class Product extends Model  implements InteractWithRecommendation
         return $this->belongsTo(Seller::class, 'seller_id');
     }
 
+    public function logClick()
+    {
+        return $this->hasMany(LogClick::class, 'product_id');
+    }
+
     public static function boot()
     {
         parent::boot();
