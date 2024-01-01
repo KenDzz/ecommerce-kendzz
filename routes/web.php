@@ -11,9 +11,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReviewsController;
+use App\Http\Controllers\ProductSaleTimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersChatController;
 use App\Http\Controllers\UserVerifyController;
+use App\Models\ProductSaleTimer;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,7 +46,7 @@ Route::get('getDetailProductTiki/{id}', [CrawlProductController::class,'getDetai
 Route::get('crawlProductTiki/{category}/{urlKey}/{totalPage}/{categoryReal}', [CrawlProductController::class,'crawlProductTiki'])->name('crawlProductTiki');
 Route::get('search', [ProductController::class, 'search'])->name('search');
 Route::post('checkCoupons', [CouponsController::class, 'checkCouponsRequest'])->name('check-coupons');
-
+Route::get('product/sale', [ProductSaleTimerController::class, 'getAllSale'])->name('product-sale-timer');
 Route::get('provinces/depth/{id}', [CrawlProductController::class,'getProvinces'])->name('getProvinces');
 Route::get('city/depth/{id}', [CrawlProductController::class,'getCity'])->name('getCity');
 Route::get('district/depth/{id}', [CrawlProductController::class,'getDistrict'])->name('getDistrict');

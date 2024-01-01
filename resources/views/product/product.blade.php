@@ -323,7 +323,7 @@
 
                                 <div class="showcase-banner">
 
-                                    @if (!empty($product->productMedia) && $product->productMedia->count())
+                                @if (!empty($product->productMedia) && $product->productMedia->count())
                                         @foreach ($product->productMedia as $key => $productMedia)
                                             @if ($key == 0)
                                                 <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"

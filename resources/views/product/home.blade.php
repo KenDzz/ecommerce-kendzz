@@ -11,8 +11,8 @@
 
 
     <!--
-      - CATEGORY
-    -->
+          - CATEGORY
+        -->
 
     {{-- @include('home.category') --}}
 
@@ -21,8 +21,8 @@
 
 
     <!--
-      - PRODUCT
-    -->
+          - PRODUCT
+        -->
 
     <div class="product-container">
 
@@ -30,8 +30,8 @@
 
 
             <!--
-          - SIDEBAR
-        -->
+              - SIDEBAR
+            -->
 
             @include('home.sidebar')
 
@@ -40,52 +40,57 @@
 
 
                 <!--
-            - PRODUCT FEATURED
-          -->
+                - PRODUCT FEATURED
+              -->
+
+
 
                 <div class="product-featured">
 
                     <h2 class="title">Deal of the day</h2>
 
-                    <div class="showcase-wrapper has-scrollbar">
+                    <div class="owl-carousel owl-carousel-sale-timer">
 
-                        <div class="showcase-container">
+                        @foreach ($sale as $data)
+                            <div class="showcase-container item">
 
-                            <div class="showcase">
+                                <div class="showcase">
 
-                                <div class="showcase-banner">
-                                    <img src="{{ url('images/products/shampoo.jpg') }}"
-                                        alt="shampoo, conditioner & facewash packs" class="showcase-img">
+                                    <div class="showcase-banner">
+                                        @if (!empty($data->product->productMedia) && $data->product->productMedia->count())
+                                            @foreach ($data->product->productMedia as $key => $productMedia)
+                                                @if ($key == 0)
+                                                    <img src="{{ url($productMedia->url) }}" alt="{{ $data->product->name }}">
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <img src="https://dummyimage.com/800x700/ffffff/000000&text=first">
+                                        @endif
                                 </div>
 
                                 <div class="showcase-content">
 
                                     <div class="showcase-rating">
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star-outline"></ion-icon>
-                                        <ion-icon name="star-outline"></ion-icon>
+                                        {!! $data->product->getStarRating() !!}
                                     </div>
 
-                                    <a href="#">
-                                        <h3 class="showcase-title">shampoo, conditioner & facewash packs</h3>
+                                    <a href="{{ route('detail-product', ['slug' => urlencode($data->product->slug), 'id' => $data->product->id]) }}">
+                                        <h3 class="showcase-title">{{ $data->product->name }}</h3>
                                     </a>
 
-                                    <p class="showcase-desc">
-                                        Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                                        dolor dolor sit amet consectetur Lorem ipsum dolor
-                                    </p>
 
                                     <div class="price-box">
-                                        <p class="price">$150.00</p>
-
-                                        <del>$200.00</del>
+                                        @if ($data->product->discount > 0)
+                                            <p class="price">
+                                                {{ app('App\Http\Controllers\HomeController')->formatCurrency($data->product->price, $data->discount) }}
+                                            </p>
+                                            <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($data->product->price, 0) }}</del>
+                                        @endif
                                     </div>
 
-                                    <button class="add-cart-btn">add to cart</button>
+                                    <button class="add-cart-btn">Thêm giỏ hàng</button>
 
-                                    <div class="showcase-status">
+                                    {{-- <div class="showcase-status">
                                         <div class="wrapper">
                                             <p>
                                                 already sold: <b>20</b>
@@ -97,37 +102,37 @@
                                         </div>
 
                                         <div class="showcase-status-bar"></div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="countdown-box">
 
                                         <p class="countdown-desc">
-                                            Hurry Up! Offer ends in:
+                                            Nhanh lên! Ưu đãi kết thúc sau:
                                         </p>
 
                                         <div class="countdown">
 
                                             <div class="countdown-content">
 
-                                                <p class="display-number">360</p>
+                                                <p class="display-number display-number-day-{{$data->product->id}}">360</p>
 
-                                                <p class="display-text">Days</p>
+                                                <p class="display-text">Ngày</p>
 
                                             </div>
 
                                             <div class="countdown-content">
-                                                <p class="display-number">24</p>
-                                                <p class="display-text">Hours</p>
+                                                <p class="display-number display-number-hour-{{$data->product->id}}">24</p>
+                                                <p class="display-text">Giờ</p>
                                             </div>
 
                                             <div class="countdown-content">
-                                                <p class="display-number">59</p>
-                                                <p class="display-text">Min</p>
+                                                <p class="display-number display-number-min-{{$data->product->id}}">59</p>
+                                                <p class="display-text">Phút</p>
                                             </div>
 
                                             <div class="countdown-content">
-                                                <p class="display-number">00</p>
-                                                <p class="display-text">Sec</p>
+                                                <p class="display-number display-number-sec-{{$data->product->id}}">00</p>
+                                                <p class="display-text">Giây</p>
                                             </div>
 
                                         </div>
@@ -139,185 +144,105 @@
                             </div>
 
                         </div>
+                    @endforeach
+                </div>
 
-                        <div class="showcase-container">
+            </div>
 
+
+
+            <!--
+            - PRODUCT GRID
+          -->
+
+            <div class="product-main">
+
+                <h2 class="title">New Products</h2>
+
+                <div class="product-grid">
+
+                    @if (!empty($products) && $products->count())
+                        @foreach ($products as $product)
                             <div class="showcase">
 
                                 <div class="showcase-banner">
-                                    <img src="{{ url('images/products/jewellery-1.jpg') }}" alt="Rose Gold diamonds Earring"
-                                        class="showcase-img">
+
+                                    @if (!empty($product->productMedia) && $product->productMedia->count())
+                                        @foreach ($product->productMedia as $key => $productMedia)
+                                            @if ($key == 0)
+                                                <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
+                                                    width="300" class="product-img default">
+                                            @else
+                                                <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
+                                                    width="300" class="product-img hover">
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <img src="https://dummyimage.com/800x700/ffffff/000000&text=first"
+                                            width="300" class="product-img default">
+                                        <img src="https://dummyimage.com/800x700/ffffff/000000&text=second"
+                                            alt="{{ $product->name }}" width="300" class="product-img hover">
+                                    @endif
+
+                                    @if ($product->discount > 0)
+                                        <p class="showcase-badge">{{ $product->discount }}%</p>
+                                    @endif
+
+                                    <div class="showcase-actions">
+
+                                        <button class="btn-action btn-action-favourite"
+                                            data-product-id="{{ $product->id }}">
+                                            <ion-icon name="heart-outline" class="icon-favourite-product"></ion-icon>
+                                        </button>
+
+                                        <button class="btn-action">
+                                            <ion-icon name="eye-outline"></ion-icon>
+                                        </button>
+
+                                        <button class="btn-action">
+                                            <ion-icon name="repeat-outline"></ion-icon>
+                                        </button>
+
+                                        <button class="btn-action">
+                                            <ion-icon name="bag-add-outline"></ion-icon>
+                                        </button>
+
+                                    </div>
+
                                 </div>
 
                                 <div class="showcase-content">
 
+                                    <a href="#" class="showcase-category"></a>
+
+                                    <a
+                                        href="{{ route('detail-product', ['slug' => urlencode($product->slug), 'id' => $product->id]) }}">
+                                        <h3 class="showcase-title">{{ $product->name }}</h3>
+                                    </a>
+
                                     <div class="showcase-rating">
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star-outline"></ion-icon>
-                                        <ion-icon name="star-outline"></ion-icon>
+                                        {!! $product->getStarRating() !!}
                                     </div>
-
-                                    <h3 class="showcase-title">
-                                        <a href="#" class="showcase-title">Rose Gold diamonds Earring</a>
-                                    </h3>
-
-                                    <p class="showcase-desc">
-                                        Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                                        dolor dolor sit amet consectetur Lorem ipsum dolor
-                                    </p>
 
                                     <div class="price-box">
-                                        <p class="price">$1990.00</p>
-                                        <del>$2000.00</del>
-                                    </div>
-
-                                    <button class="add-cart-btn">add to cart</button>
-
-                                    <div class="showcase-status">
-                                        <div class="wrapper">
-                                            <p> already sold: <b>15</b> </p>
-
-                                            <p> available: <b>40</b> </p>
-                                        </div>
-
-                                        <div class="showcase-status-bar"></div>
-                                    </div>
-
-                                    <div class="countdown-box">
-
-                                        <p class="countdown-desc">Hurry Up! Offer ends in:</p>
-
-                                        <div class="countdown">
-                                            <div class="countdown-content">
-                                                <p class="display-number">360</p>
-                                                <p class="display-text">Days</p>
-                                            </div>
-
-                                            <div class="countdown-content">
-                                                <p class="display-number">24</p>
-                                                <p class="display-text">Hours</p>
-                                            </div>
-
-                                            <div class="countdown-content">
-                                                <p class="display-number">59</p>
-                                                <p class="display-text">Min</p>
-                                            </div>
-
-                                            <div class="countdown-content">
-                                                <p class="display-number">00</p>
-                                                <p class="display-text">Sec</p>
-                                            </div>
-                                        </div>
-
+                                        @if ($product->discount > 0)
+                                            <p class="price">
+                                                {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
+                                            </p>
+                                            <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, 0) }}</del>
+                                        @else
+                                            <p class="price">
+                                                {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
+                                            </p>
+                                        @endif
                                     </div>
 
                                 </div>
 
                             </div>
+                        @endforeach
 
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <!--
-            - PRODUCT GRID
-          -->
-
-                <div class="product-main">
-
-                    <h2 class="title">New Products</h2>
-
-                    <div class="product-grid">
-
-                        @if (!empty($products) && $products->count())
-                            @foreach ($products as $product)
-                                <div class="showcase">
-
-                                    <div class="showcase-banner">
-
-                                        @if (!empty($product->productMedia) && $product->productMedia->count())
-                                            @foreach ($product->productMedia as $key => $productMedia)
-                                                @if ($key == 0)
-                                                    <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
-                                                        width="300" class="product-img default">
-                                                @else
-                                                    <img src="{{ url($productMedia->url) }}" alt="{{ $product->name }}"
-                                                        width="300" class="product-img hover">
-                                                @endif
-                                            @endforeach
-                                        @else
-                                            <img src="https://dummyimage.com/800x700/ffffff/000000&text=first"
-                                                width="300" class="product-img default">
-                                            <img src="https://dummyimage.com/800x700/ffffff/000000&text=second"
-                                                alt="{{ $product->name }}" width="300" class="product-img hover">
-                                        @endif
-
-                                        @if ($product->discount > 0)
-                                            <p class="showcase-badge">{{ $product->discount }}%</p>
-                                        @endif
-
-                                        <div class="showcase-actions">
-
-                                            <button class="btn-action btn-action-favourite" data-product-id="{{$product->id}}">
-                                                <ion-icon name="heart-outline" class="icon-favourite-product"></ion-icon>
-                                            </button>
-
-                                            <button class="btn-action">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
-
-                                            <button class="btn-action">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
-
-                                            <button class="btn-action">
-                                                <ion-icon name="bag-add-outline"></ion-icon>
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="showcase-content">
-
-                                        <a href="#" class="showcase-category"></a>
-
-                                        <a
-                                            href="{{ route('detail-product', ['slug' => urlencode($product->slug), 'id' => $product->id]) }}">
-                                            <h3 class="showcase-title">{{ $product->name }}</h3>
-                                        </a>
-
-                                        <div class="showcase-rating">
-                                            {!! $product->getStarRating() !!}
-                                        </div>
-
-                                        <div class="price-box">
-                                            @if ($product->discount > 0)
-                                                <p class="price">
-                                                    {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
-                                                </p>
-                                                <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, 0) }}</del>
-                                            @else
-                                                <p class="price">
-                                                    {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
-                                                </p>
-                                            @endif
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            @endforeach
-
-                        @endif
-                    </div>
-
+                    @endif
                 </div>
 
             </div>
@@ -326,179 +251,181 @@
 
     </div>
 
+</div>
 
 
 
 
-    <!--
+
+<!--
       - TESTIMONIALS, CTA & SERVICE
     -->
 
-    <div>
+<div>
 
-        <div class="container">
+    <div class="container">
 
-            <div class="testimonials-box">
+        <div class="testimonials-box">
 
-                <!--
+            <!--
             - TESTIMONIALS
           -->
 
-                <div class="testimonial">
+            <div class="testimonial">
 
-                    <h2 class="title">testimonial</h2>
+                <h2 class="title">testimonial</h2>
 
-                    <div class="testimonial-card">
+                <div class="testimonial-card">
 
-                        <img src="{{ url('images/testimonial-1.jpg') }}" alt="alan doe" class="testimonial-banner"
-                            width="80" height="80">
+                    <img src="{{ url('images/testimonial-1.jpg') }}" alt="alan doe" class="testimonial-banner"
+                        width="80" height="80">
 
-                        <p class="testimonial-name">Alan Doe</p>
+                    <p class="testimonial-name">Alan Doe</p>
 
-                        <p class="testimonial-title">CEO & Founder Invision</p>
+                    <p class="testimonial-title">CEO & Founder Invision</p>
 
-                        <img src="{{ url('images/icons/quotes.svg') }}" alt="quotation" class="quotation-img"
-                            width="26">
+                    <img src="{{ url('images/icons/quotes.svg') }}" alt="quotation" class="quotation-img"
+                        width="26">
 
-                        <p class="testimonial-desc">
-                            Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                            dolor dolor sit amet.
-                        </p>
-
-                    </div>
+                    <p class="testimonial-desc">
+                        Lorem ipsum dolor sit amet consectetur Lorem ipsum
+                        dolor dolor sit amet.
+                    </p>
 
                 </div>
 
+            </div>
 
 
-                <!--
+
+            <!--
             - CTA
           -->
 
-                <div class="cta-container">
+            <div class="cta-container">
 
-                    <img src="{{ url('images/cta-banner.jpg') }}" alt="summer collection" class="cta-banner">
+                <img src="{{ url('images/cta-banner.jpg') }}" alt="summer collection" class="cta-banner">
 
-                    <a href="#" class="cta-content">
+                <a href="#" class="cta-content">
 
-                        <p class="discount">25% Discount</p>
+                    <p class="discount">25% Discount</p>
 
-                        <h2 class="cta-title">Summer collection</h2>
+                    <h2 class="cta-title">Summer collection</h2>
 
-                        <p class="cta-text">Starting @ $10</p>
+                    <p class="cta-text">Starting @ $10</p>
 
-                        <button class="cta-btn">Shop now</button>
+                    <button class="cta-btn">Shop now</button>
+
+                </a>
+
+            </div>
+
+
+
+            <!--
+            - SERVICE
+          -->
+
+            <div class="service">
+
+                <h2 class="title">Our Services</h2>
+
+                <div class="service-container">
+
+                    <a href="#" class="service-item">
+
+                        <div class="service-icon">
+                            <ion-icon name="boat-outline"></ion-icon>
+                        </div>
+
+                        <div class="service-content">
+
+                            <h3 class="service-title">Worldwide Delivery</h3>
+                            <p class="service-desc">For Order Over $100</p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="#" class="service-item">
+
+                        <div class="service-icon">
+                            <ion-icon name="rocket-outline"></ion-icon>
+                        </div>
+
+                        <div class="service-content">
+
+                            <h3 class="service-title">Next Day delivery</h3>
+                            <p class="service-desc">UK Orders Only</p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="#" class="service-item">
+
+                        <div class="service-icon">
+                            <ion-icon name="call-outline"></ion-icon>
+                        </div>
+
+                        <div class="service-content">
+
+                            <h3 class="service-title">Best Online Support</h3>
+                            <p class="service-desc">Hours: 8AM - 11PM</p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="#" class="service-item">
+
+                        <div class="service-icon">
+                            <ion-icon name="arrow-undo-outline"></ion-icon>
+                        </div>
+
+                        <div class="service-content">
+
+                            <h3 class="service-title">Return Policy</h3>
+                            <p class="service-desc">Easy & Free Return</p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="#" class="service-item">
+
+                        <div class="service-icon">
+                            <ion-icon name="ticket-outline"></ion-icon>
+                        </div>
+
+                        <div class="service-content">
+
+                            <h3 class="service-title">30% money back</h3>
+                            <p class="service-desc">For Order Over $100</p>
+
+                        </div>
 
                     </a>
 
                 </div>
 
-
-
-                <!--
-            - SERVICE
-          -->
-
-                <div class="service">
-
-                    <h2 class="title">Our Services</h2>
-
-                    <div class="service-container">
-
-                        <a href="#" class="service-item">
-
-                            <div class="service-icon">
-                                <ion-icon name="boat-outline"></ion-icon>
-                            </div>
-
-                            <div class="service-content">
-
-                                <h3 class="service-title">Worldwide Delivery</h3>
-                                <p class="service-desc">For Order Over $100</p>
-
-                            </div>
-
-                        </a>
-
-                        <a href="#" class="service-item">
-
-                            <div class="service-icon">
-                                <ion-icon name="rocket-outline"></ion-icon>
-                            </div>
-
-                            <div class="service-content">
-
-                                <h3 class="service-title">Next Day delivery</h3>
-                                <p class="service-desc">UK Orders Only</p>
-
-                            </div>
-
-                        </a>
-
-                        <a href="#" class="service-item">
-
-                            <div class="service-icon">
-                                <ion-icon name="call-outline"></ion-icon>
-                            </div>
-
-                            <div class="service-content">
-
-                                <h3 class="service-title">Best Online Support</h3>
-                                <p class="service-desc">Hours: 8AM - 11PM</p>
-
-                            </div>
-
-                        </a>
-
-                        <a href="#" class="service-item">
-
-                            <div class="service-icon">
-                                <ion-icon name="arrow-undo-outline"></ion-icon>
-                            </div>
-
-                            <div class="service-content">
-
-                                <h3 class="service-title">Return Policy</h3>
-                                <p class="service-desc">Easy & Free Return</p>
-
-                            </div>
-
-                        </a>
-
-                        <a href="#" class="service-item">
-
-                            <div class="service-icon">
-                                <ion-icon name="ticket-outline"></ion-icon>
-                            </div>
-
-                            <div class="service-content">
-
-                                <h3 class="service-title">30% money back</h3>
-                                <p class="service-desc">For Order Over $100</p>
-
-                            </div>
-
-                        </a>
-
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
 
     </div>
 
+</div>
 
 
 
 
-    <!--
+
+<!--
       - BLOG
     -->
 
-    <div class="blog">
+{{-- <div class="blog">
 
         <div class="container">
 
@@ -606,5 +533,10 @@
 
         </div>
 
-    </div>
+    </div> --}}
+
+@section('scripts')
+    <script src="{{ url('js/countdowns.js') }}"></script>
+@endsection
+
 @endsection

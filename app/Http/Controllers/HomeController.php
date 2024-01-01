@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\LogClick;
 use App\Models\Product;
+use App\Models\ProductSaleTimer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function index(){
+
+        $productSale = ProductSaleTimer::all();
         $dataProduct = [];
         $lisLogClickProduct = LogClick::where('user_id', 0)->orderBy('created_at', 'DESC')->limit(3)->get();
         if(Auth::check()){
@@ -26,7 +29,7 @@ class HomeController extends Controller
         }else{
             $products = Product::inRandomOrder()->limit(12)->get();
         }
-        $data = ['products' => $products];
+        $data = ['products' => $products, 'sale' => $productSale];
         return view('product.home',$data);
     }
 

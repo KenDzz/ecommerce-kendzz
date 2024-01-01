@@ -22,6 +22,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
     <link href="{{ url('css/star-rating.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link href="{{ url('css/owl.carousel.min.css') }}" rel="stylesheet">
 
     <!--
     - google font link
@@ -149,6 +150,7 @@
 
 <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
 <script src="{{ url('js/notiflix-3.2.6.min.js') }}"></script>
+<script src="{{ url('js/owl.carousel.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
@@ -171,6 +173,6 @@
     - ionicon link
   -->
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></scrip>
-
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+@yield('scripts')
 </html>

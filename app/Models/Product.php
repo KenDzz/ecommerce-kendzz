@@ -97,6 +97,11 @@ class Product extends Model  implements InteractWithRecommendation
         return $this->hasMany(LogClick::class, 'product_id');
     }
 
+    public function ProductSaleTimer()
+    {
+        return $this->hasMany(ProductSaleTimer::class, 'product_id');
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -2,6 +2,7 @@ Notiflix.Notify.init({
     position: "right-bottom",
 });
 
+
 $(document).ready(function () {
     getCostShipping();
     reloadFavourite();
