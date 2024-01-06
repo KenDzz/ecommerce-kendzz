@@ -68,10 +68,9 @@ class CheckoutController extends Controller
         $checkData = $request->validate([
             'coupons' => ['nullable', 'string', 'max:50'],
         ]);
-
-    $CouponShip = 0;
+        $CouponShip = 0;
         $CouponPrice = 0;
-$moneyShip = $this->getTotalPriceShippingSPXJson();
+        $moneyShip = $this->getTotalPriceShippingSPXJson();
         $totalCart = $this->getTotalCart();
         if(isset($checkData['coupons'])){
             $Coupons = $this->couponsController->checkCoupons($checkData['coupons']);

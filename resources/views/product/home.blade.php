@@ -47,13 +47,13 @@
 
                 <div class="product-featured">
 
-                    <h2 class="title">Deal of the day</h2>
+                    <h2 class="title">Ưu đãi</h2>
 
                     <div class="owl-carousel owl-carousel-sale-timer">
 
                         @foreach ($sale as $data)
-                            <div class="showcase-container item">
-
+                            <div class="showcase-container item product-content" productId="{{ $data->product->id }}">
+                                <input type="hidden" class="custom-input-number-product" value="1">
                                 <div class="showcase">
 
                                     <div class="showcase-banner">
@@ -88,7 +88,7 @@
                                         @endif
                                     </div>
 
-                                    <button class="add-cart-btn">Thêm giỏ hàng</button>
+                                    <button class="add-cart-btn btn-add-product-to-cart">Thêm giỏ hàng</button>
 
                                     {{-- <div class="showcase-status">
                                         <div class="wrapper">
@@ -157,7 +157,7 @@
 
             <div class="product-main">
 
-                <h2 class="title">New Products</h2>
+                <h2 class="title">Dành cho bạn</h2>
 
                 <div class="product-grid">
 
@@ -277,19 +277,18 @@
 
                 <div class="testimonial-card">
 
-                    <img src="{{ url('images/testimonial-1.jpg') }}" alt="alan doe" class="testimonial-banner"
+                    <img src="{{ url('images/logo/favicon.ico') }}" alt="alan doe" class="testimonial-banner"
                         width="80" height="80">
 
-                    <p class="testimonial-name">Alan Doe</p>
+                    <p class="testimonial-name">Về chúng tôi</p>
 
-                    <p class="testimonial-title">CEO & Founder Invision</p>
+                    <p class="testimonial-title">CEO & Founder</p>
 
                     <img src="{{ url('images/icons/quotes.svg') }}" alt="quotation" class="quotation-img"
                         width="26">
 
                     <p class="testimonial-desc">
-                        Lorem ipsum dolor sit amet consectetur Lorem ipsum
-                        dolor dolor sit amet.
+                        Điều rất quan trọng là có một dịch vụ khách hàng tốt.
                     </p>
 
                 </div>
@@ -307,15 +306,10 @@
                 <img src="{{ url('images/cta-banner.jpg') }}" alt="summer collection" class="cta-banner">
 
                 <a href="#" class="cta-content">
-
-                    <p class="discount">25% Discount</p>
-
-                    <h2 class="cta-title">Summer collection</h2>
-
-                    <p class="cta-text">Starting @ $10</p>
-
-                    <button class="cta-btn">Shop now</button>
-
+                    <p class="discount">Giảm 35%</p>
+                    <h2 class="cta-title">oy7Pfps3j0</h2>
+                    <p class="cta-text">Giảm giá 30%</p>
+                    <button class="cta-btn">Nhập mã giảm ngay!</button>
                 </a>
 
             </div>

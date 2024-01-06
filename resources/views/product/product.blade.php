@@ -59,19 +59,31 @@
                             </a>
 
                             <div class="price-box">
-                                @if ($product->discount > 0)
-                                    <p class="price">
-                                        {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
-                                    </p>
-                                    <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, 0) }}</del>
+                                @if($discountSale == 0)
+                                    @if ($product->discount > 0)
+                                        <p class="price">
+                                            {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
+                                        </p>
+                                        <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, 0) }}</del>
+                                    @else
+                                        <p class="price">
+                                            {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
+                                        </p>
+                                    @endif
                                 @else
                                     <p class="price">
-                                        {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $product->discount) }}
+                                        {{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, $discountSale) }}
                                     </p>
+                                    <del>{{ app('App\Http\Controllers\HomeController')->formatCurrency($product->price, 0) }}</del>
                                 @endif
                                 <span
                                     class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 align-middle">Giảm
-                                    {{ $product->discount }}%</span>
+                                    @if ($discountSale > 0)
+                                        {{ $discountSale }}
+                                    @else
+                                        {{ $product->discount }}
+                                    @endif
+                                    %</span>
 
                             </div>
 
@@ -189,42 +201,35 @@
                                 </div>
 
                                 <div class="showcase-status-bar"></div>
-                            </div>
+                            </div> --}}
+                            @if ($discountSale > 0)
+                                <div class="countdown-box">
+                                    <p class="countdown-desc">
+                                        Nhanh lên! Ưu đãi kết thúc sau:
+                                    </p>
+                                    <div class="countdown">
+                                        <div class="countdown-content">
+                                            <p class="display-number display-number-day-{{$product->id}}">360</p>
+                                            <p class="display-text">Ngày</p>
+                                        </div>
+                                        <div class="countdown-content">
+                                            <p class="display-number display-number-hour-{{$product->id}}">24</p>
+                                            <p class="display-text">Giờ</p>
+                                        </div>
+                                        <div class="countdown-content">
+                                            <p class="display-number display-number-min-{{$product->id}}">59</p>
+                                            <p class="display-text">Phút</p>
+                                        </div>
+                                        <div class="countdown-content">
+                                            <p class="display-number display-number-sec-{{$product->id}}">00</p>
+                                            <p class="display-text">Giây</p>
+                                        </div>
 
-                            <div class="countdown-box">
-
-                                <p class="countdown-desc">
-                                    Hurry Up! Offer ends in:
-                                </p>
-
-                                <div class="countdown">
-
-                                    <div class="countdown-content">
-
-                                        <p class="display-number">360</p>
-
-                                        <p class="display-text">Days</p>
-
-                                    </div>
-
-                                    <div class="countdown-content">
-                                        <p class="display-number">24</p>
-                                        <p class="display-text">Hours</p>
-                                    </div>
-
-                                    <div class="countdown-content">
-                                        <p class="display-number">59</p>
-                                        <p class="display-text">Min</p>
-                                    </div>
-
-                                    <div class="countdown-content">
-                                        <p class="display-number">00</p>
-                                        <p class="display-text">Sec</p>
                                     </div>
 
                                 </div>
+                            @endif
 
-                            </div> --}}
 
                         </div>
 
@@ -317,9 +322,9 @@
                     <h1
                         class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">
                         Gợi ý</h1>
-                    <div class="product-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="product-grid owl-carousel owl-carousel-remember-system">
                         @foreach ($productRecommendations as $product)
-                            <div class="showcase">
+                            <div class="showcase item">
 
                                 <div class="showcase-banner">
 
@@ -615,4 +620,7 @@
     </div>
 </div>
 
+@endsection
+@section('scripts')
+    <script src="{{ url('js/countdowns.js') }}"></script>
 @endsection

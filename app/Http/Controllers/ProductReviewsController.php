@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductReviewsController extends Controller
 {
+    private $checkBadWords;
+
+
+    public function __construct(CheckBadWordsController $var) {
+        $this->checkBadWords = $var;
+    }
+
     public function addReview(Request $request){
         $validated = $request->validate([
             'id' => ['required', 'numeric'],
@@ -31,6 +38,10 @@ class ProductReviewsController extends Controller
         if($order){
             if($order->is_review){
                 return response()->json(["status" => "false","message" => "Sản phẩm đã được đánh giá"], 422);
+            }
+            $flagCheckBadWord = $this->checkBadWords->checkBadWordString($validated['comment']);
+            if($flagCheckBadWord){
+                return response()->json(["status" => "false","message" => "Vi phạm chính sách!"], 422);
             }
             $productReview = new ProductReviews();
             $productReview->user_id = Auth::user()->id;

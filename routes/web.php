@@ -58,8 +58,22 @@ Route::prefix('dashboard/seller')->middleware('is_seller')->name('dashboard')->g
     Route::get('/chat/list', [UsersChatController::class, 'listChatSeller'])->name('-list-chat-user');
     Route::post('/chat/list/detail', [UsersChatController::class, 'listDetailChatUser'])->name('-list-chat-detail');
     Route::post('/chat/send', [UsersChatController::class, 'sendChatSeller'])->name('-send-chat');
+    Route::get('/product', [DashBoardController::class, 'productView'])->name('-product');
+    Route::get('/product/add', [DashBoardController::class, 'productAdd'])->name('-add-product');
+    Route::post('/product/add/detail', [DashBoardController::class, 'productAddForm'])->name('-add-product-form');
+    Route::get('/product/update/{id}', [DashBoardController::class, 'productUpadte'])->name('-product-update');
+    Route::post('/upload', [FileUploadController::class, 'storeImage'])->name('-uploads-image');
+    Route::post('/product/add/media', [DashBoardController::class, 'addMediaProduct'])->name('-add-media');
+    Route::post('/product/delete/media', [DashBoardController::class, 'delMediaProduct'])->name('-delete-media');
+});
+
+Route::prefix('dashboard/admin')->middleware('is_admin')->name('dashboard-admin')->group(function () {
+    Route::get('/product/{id}', [DashBoardController::class, 'productViewAdmin'])->name('-product-confirm');
+    Route::get('/product/update/{id}', [DashBoardController::class, 'productUpadteAdmin'])->name('-product-update');
+    Route::get('/product/update/confirm/{id}/{status}', [DashBoardController::class, 'productUpadteConfirmAdmin'])->name('-product-confirm-update');
 
 });
+
 
 Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('/', [UserController::class, 'infoUser'])->name('-info');

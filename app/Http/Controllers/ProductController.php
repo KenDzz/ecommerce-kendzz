@@ -16,14 +16,18 @@ class ProductController extends Controller
     private $homeController;
     private $logController;
 
-    public function __construct(HomeController $homeController, LogController $log) {
+    private $productSaleController;
+
+
+    public function __construct(HomeController $homeController, LogController $log, ProductSaleTimerController $sale) {
         $this->homeController = $homeController;
         $this->logController = $log;
+        $this->productSaleController = $sale;
     }
 
     public function categoryProduct($id){
         if(is_numeric($id)){
-            $products = Product::where('category_id',$id)->paginate(12);
+            $products = Product::where('category_id',$id)->where('is_confirm','2')->paginate(12);
             $category  = Category::where('id',$id)->first();
             $data = ['products' => $products, 'title' => $category->name];
             return view('product.category',$data);
@@ -37,14 +41,14 @@ class ProductController extends Controller
         $checkInfo = $request->validate([
             'search' => ['required', 'string', 'max:255'],
         ]);
-        $productSearch = $product::where('name', 'LIKE', '%' . $checkInfo['search'] . '%')->paginate(12);
+        $productSearch = $product::where('name', 'LIKE', '%' . $checkInfo['search'] . '%')->where('is_confirm','2')->paginate(12);
         $title = "Tìm kiếm - ".$checkInfo['search'];
         return view("product.search", ["products" => $productSearch, "title" => $title]);
     }
 
     public function detailProduct($id, $slug){
         $this->logController->logClick($id);
-        $product = Product::where('id',$id)->where('slug',$slug)->firstOrFail();
+        $product = Product::where('id',$id)->where('slug',$slug)->where('is_confirm','2')->firstOrFail();
         $productTypes = $product->productType;
         $DataRecommendations = $product->Recommendations->where('order_column' ,'>', 0)->toArray();
         $targetIds = array_column($DataRecommendations, 'target_id');
@@ -55,6 +59,7 @@ class ProductController extends Controller
         $reviewsWithRating3 = $productReviews->where('rate', 3);
         $reviewsWithRating4 = $productReviews->where('rate', 4);
         $reviewsWithRating5 = $productReviews->where('rate', 5);
+        $discountSale = $this->productSaleController->getSale($product->id);
         $data = [
             'product' => $product,
             'productTypes' => $productTypes,
@@ -64,7 +69,8 @@ class ProductController extends Controller
             'reviewsWithRating2' => $reviewsWithRating2 ,
             'reviewsWithRating3' => $reviewsWithRating3 ,
             'reviewsWithRating4' => $reviewsWithRating4 ,
-            'reviewsWithRating5' => $reviewsWithRating5
+            'reviewsWithRating5' => $reviewsWithRating5 ,
+            'discountSale' => $discountSale
         ];
 
         return view('product.product', $data);
@@ -161,6 +167,9 @@ class ProductController extends Controller
         $price = $product->price;
         if($product->discount > 0){
             $price = $this->homeController->calculateCurrency($product->price, $product->discount);
+        }
+        if($this->productSaleController->checkSale($product->id) > 0){
+            $price = $this->productSaleController->checkSale($product->id);
         }
         $cart = session()->get('cart', []);
         $id = $checkInfo['id'].$checkInfo['category'].$checkInfo['size'];

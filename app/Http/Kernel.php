@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
         'is_checkout' => \App\Http\Middleware\IsCheckout::class,
         'is_seller' => \App\Http\Middleware\IsSeller::class,
+        'is_admin' => \App\Http\Middleware\IsAdmin::class,
 
     ];
 }

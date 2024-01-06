@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Dashboard - Seller </title>
+    <title> Dashboard - Admin </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Favicon -->
@@ -29,7 +29,7 @@
 
 </head>
 
-<body attr-data-id="{{ Auth::user()->seller->id }}">
+<body attr-data-id="{{ Auth::user()->id }}">
     <!-- preloader -->
     <div class="preloader">
         <img src="{{ url('images/logo/logo.svg') }}" alt="logo">
@@ -543,8 +543,8 @@
                             alt="image">
                     </div>
                     <div>
-                        <div class="fw-bold">{{ Auth::user()->seller->name }}</div>
-                        <small class="text-muted">Seller</small>
+                        <div class="fw-bold">{{ Auth::user()->name }}</div>
+                        <small class="text-muted">Admin</small>
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -565,119 +565,24 @@
                 </div>
             </div>
             <ul>
-                <li class="menu-divider">Dashboard</li>
                 <li>
-                    <a href="./dashboard.html">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-bar-chart"></i>
-                        </span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-receipt"></i>
-                        </span>
-                        <span>Orders</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="./orders.html">List</a>
-                        </li>
-                        <li>
-                            <a href="./order-detail.html">Detail</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('dashboard-product') }}">
+                    <a href="{{ route('dashboard-admin-product-confirm', ['id' => 4]) }} ">
                         <span class="nav-link-icon">
                             <i class="bi bi-truck"></i>
                         </span>
                         <span>Products</span>
                     </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-wallet2"></i>
-                        </span>
-                        <span>Buyer</span>
-                    </a>
                     <ul>
                         <li>
-                            <a href="./buyer-dashboard.html">Dashboard</a>
+                            <a href="{{ route('dashboard-admin-product-confirm', ['id' => 1]) }}">Xét duyệt</a>
                         </li>
                         <li>
-                            <a href="./buyer-orders.html">Orders</a>
+                            <a href="{{ route('dashboard-admin-product-confirm', ['id' => 2]) }}">Đã xét duyệt</a>
                         </li>
                         <li>
-                            <a href="./buyer-addresses.html">Addresses</a>
-                        </li>
-                        <li>
-                            <a href="./buyer-wishlist.html">Wishlist</a>
+                            <a href="{{ route('dashboard-admin-product-confirm', ['id' => 3]) }}">Từ chối</a>
                         </li>
                     </ul>
-                </li>
-                <li>
-                    <a href="./customers.html">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-person-badge"></i>
-                        </span>
-                        <span>Customers</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-receipt"></i>
-                        </span>
-                        <span>Invoices</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="./invoices.html">List</a>
-                        </li>
-                        <li>
-                            <a href="./invoice-detail.html">Detail</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-divider">Apps</li>
-                <li>
-                    <a href="{{ route('dashboard-chat') }}">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-chat-square"></i>
-                        </span>
-                        <span>Chats</span>
-                        <span class="badge bg-success rounded-circle ms-auto">2</span>
-                    </a>
-                </li>
-                <li class="menu-divider">Pages</li>
-                <li>
-                    <a href="#">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-person"></i>
-                        </span>
-                        <span>Profile</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="./profile-posts.html">Post</a>
-                        </li>
-                        <li>
-                            <a href="./profile-connections.html">Connections</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="./settings.html">
-                        <span class="nav-link-icon">
-                            <i class="bi bi-gear"></i>
-                        </span>
-                        <span>Settings</span>
-                    </a>
                 </li>
             </ul>
         </div>

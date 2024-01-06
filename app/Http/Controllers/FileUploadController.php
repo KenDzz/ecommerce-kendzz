@@ -9,6 +9,37 @@ use Illuminate\Validation\ValidationException;
 
 class FileUploadController extends Controller
 {
+
+    public function storeImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $bytes = openssl_random_pseudo_bytes(10);
+            $randomString = bin2hex($bytes);
+            $fileName = $fileName. $randomString . '_' . time() . '.' . $extension;
+            $request->file('upload')->move(public_path('media'), $fileName);
+            $url = asset('media/' . $fileName);
+            return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);
+        }
+    }
+
+    public function storeImageUpload(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $bytes = openssl_random_pseudo_bytes(10);
+            $randomString = bin2hex($bytes);
+            $fileName = $fileName. $randomString . '_' . time() . '.' . $extension;
+            $request->file('upload')->move(public_path('media'), $fileName);
+
+            return '/media/' . $fileName;
+        }
+    }
+
     public function process(Request $request): string
     {
         try {

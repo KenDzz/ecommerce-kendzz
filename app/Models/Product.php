@@ -30,6 +30,7 @@ class Product extends Model  implements InteractWithRecommendation
         'quantity',
         'monthly_purchases',
         'purchases',
+        'is_confirm',
         'weight'
     ];
 

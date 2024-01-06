@@ -8,12 +8,25 @@ use App\Models\Product;
 use App\Models\ProductSaleTimer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
     public function index(){
-
-        $productSale = ProductSaleTimer::all();
+        $dataSale = [];
+        $now = Carbon::now()->timestamp;
+        $productSale = ProductSaleTimer::where('is_exist', true)->get();
+        foreach ($productSale as $key => $value) {
+            $timeString = $value->date.' '.$value->h.':'.$value->m.':'.$value->s;
+            list($date, $time) = explode(' ', $timeString);
+            list($hour, $minute, $second) = array_pad(explode(':', $time), 3, 0);
+            $formattedTimeString = sprintf('%s %02d:%02d:%02d', $date, $hour, $minute, $second);
+            $start = Carbon::createFromFormat('Y-m-d H:i:s', $formattedTimeString);
+            $timestampStart = $start->timestamp;
+            if($now < $timestampStart){
+                $dataSale[] =  $value;
+            }
+        }
         $dataProduct = [];
         $lisLogClickProduct = LogClick::where('user_id', 0)->orderBy('created_at', 'DESC')->limit(3)->get();
         if(Auth::check()){
@@ -27,9 +40,9 @@ class HomeController extends Controller
             }
             $products  = Product::whereIn('id', $dataProduct)->limit(12)->get();
         }else{
-            $products = Product::inRandomOrder()->limit(12)->get();
+            $products = Product::where('is_confirm','2')->inRandomOrder()->limit(12)->get();
         }
-        $data = ['products' => $products, 'sale' => $productSale];
+        $data = ['products' => $products, 'sale' => $dataSale];
         return view('product.home',$data);
     }
 

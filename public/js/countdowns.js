@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: "product/sale",
+        url: "/product/sale",
         method: "get",
         dataType: "json",
         headers: {
@@ -13,14 +13,14 @@ $(document).ready(function () {
             Notiflix.Notify.failure(errors["message"]);
         },
     })
-        .done(function (data) {
-            $.each(data, function (i, item) {
-                countDownTimer(item);
-            });
-        })
+    .done(function (data) {
+        $.each(data, function (i, item) {
+            countDownTimer(item);
+        });
+    })
         .fail(function (jqXHR, ajaxOptions, thrownError) {});
 
-    $(".owl-carousel").owlCarousel({
+    $(".owl-carousel-sale-timer").owlCarousel({
         loop: true,
         margin: 10,
         nav: false,
@@ -36,6 +36,26 @@ $(document).ready(function () {
             },
             1000: {
                 items: 1,
+            },
+        },
+    });
+
+    $(".owl-carousel-remember-system").owlCarousel({
+        loop: true,
+        margin: 10,
+        nav: false,
+        autoplay: true,
+        autoplayTimeout: 6000,
+        autoplayHoverPause: true,
+        responsive: {
+            0: {
+                items: 2,
+            },
+            600: {
+                items: 2,
+            },
+            1000: {
+                items: 4,
             },
         },
     });
