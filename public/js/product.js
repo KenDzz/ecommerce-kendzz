@@ -4,6 +4,17 @@ Notiflix.Notify.init({
 
 
 $(document).ready(function () {
+
+    $("#form-reg-seller").submit(function (e) {
+        e.preventDefault();
+    });
+
+
+    $("#form-info-ekyc").submit(function (e) {
+        e.preventDefault();
+    });
+
+
     getCostShipping();
     reloadFavourite();
     // Sử dụng event delegation cho các nút size-choice
@@ -36,6 +47,10 @@ $(document).ready(function () {
         }
     });
 
+    if ($("#province-modal-address").children().length < 2) {
+        getProvince();
+    }
+
     $("#btn-close-modal-address").click(function () {
         $("#address-modal").toggleClass("hidden");
     });
@@ -47,6 +62,331 @@ $(document).ready(function () {
             $("#data-order-id").val($(this).attr("data-order-id"));
             $("#product-review-modal").toggleClass("hidden");
         }
+    });
+
+    function isNumeric(str) {
+        return /^\d+(\.\d+)?$/.test(str);
+    }
+
+
+    function containsCity(searchString) {
+        var city = ["Thành phố Hà Nội","Tỉnh Hà Giang","Tỉnh Cao Bằng","Tỉnh Bắc Kạn","Tỉnh Tuyên Quang","Tỉnh Lào Cai","Tỉnh Điện Biên","Tỉnh Lai Châu","Tỉnh Sơn La","Tỉnh Yên Bái","Tỉnh Hoà Bình","Tỉnh Thái Nguyên","Tỉnh Lạng Sơn","Tỉnh Quảng Ninh","Tỉnh Bắc Giang","Tỉnh Phú Thọ","Tỉnh Vĩnh Phúc","Tỉnh Bắc Ninh","Tỉnh Hải Dương","Thành phố Hải Phòng","Tỉnh Hưng Yên","Tỉnh Thái Bình","Tỉnh Hà Nam","Tỉnh Nam Định","Tỉnh Ninh Bình","Tỉnh Thanh Hóa","Tỉnh Nghệ An","Tỉnh Hà Tĩnh","Tỉnh Quảng Bình","Tỉnh Quảng Trị","Tỉnh Thừa Thiên Huế","Thành phố Đà Nẵng","Tỉnh Quảng Nam","Tỉnh Quảng Ngãi","Tỉnh Bình Định","Tỉnh Phú Yên","Tỉnh Khánh Hòa","Tỉnh Ninh Thuận","Tỉnh Bình Thuận","Tỉnh Kon Tum","Tỉnh Gia Lai","Tỉnh Đắk Lắk","Tỉnh Đắk Nông","Tỉnh Lâm Đồng","Tỉnh Bình Phước","Tỉnh Tây Ninh","Tỉnh Bình Dương","Tỉnh Đồng Nai","Tỉnh Bà Rịa - Vũng Tàu","Thành phố Hồ Chí Minh","Tỉnh Long An","Tỉnh Tiền Giang","Tỉnh Bến Tre","Tỉnh Trà Vinh","Tỉnh Vĩnh Long","Tỉnh Đồng Tháp","Tỉnh An Giang","Tỉnh Kiên Giang","Thành phố Cần Thơ","Tỉnh Hậu Giang","Tỉnh Sóc Trăng","Tỉnh Bạc Liêu","Tỉnh Cà Mau"];
+        var searchTerms = searchString.split(/[,\.]+/);
+        for (var i = 0; i < city.length; i++) {
+            var provinceName = city[i].toLowerCase();
+            for (var j = 0; j < searchTerms.length; j++) {
+                var searchTermsSecond = searchTerms[j].split(" ");
+                if (searchTermsSecond.length > 1 && provinceName.includes(searchTerms[j].toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function containsLastNameCaseInsensitive(str) {
+        var lastName = ['Nguyễn','Trần','Lê', 'Hoàng', 'Huỳnh', 'Phạm', 'Võ', 'Vũ', 'Phan', 'Trương', 'Bùi', 'Đặng', 'Đỗ', 'Ngô', 'Hồ', 'Dương', 'Đinh'];
+        var lowerStr = str.toLowerCase();
+        return lastName.some(function(name) {
+          return lowerStr.includes(name.toLowerCase());
+        });
+    }
+
+
+      function parseDateFromString(dateString) {
+        var parts = dateString.split(/[-\.]/);
+        if (parts.length === 3) {
+          var day = parseInt(parts[0], 10);
+          var month = parseInt(parts[1], 10);
+          var year = parseInt(parts[2], 10);
+          var date = new Date(year, month - 1, day);
+
+          if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
+            return year.toString().padStart(4, '0') + '-' +
+                   month.toString().padStart(2, '0') + '-' +
+                   day.toString().padStart(2, '0');
+          }
+        }
+        return null;
+      }
+
+    $("#file-upload").on("change", function () {
+        var fileInput = $(this)[0].files[0];
+        var formData = new FormData();
+        formData.append("files", fileInput);
+        $.ajax({
+            url: "http://127.0.0.1:8000/eKYC/",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                Notiflix.Loading.standard();
+            },
+            complete: function () {
+                Notiflix.Loading.remove();
+            },
+            success: function (response) {
+                logEkyc(response);
+                var isNumber = false;
+                var isName = false;
+                var isbirthday = false;
+                var addressOne = false;
+                var addressSecond = false;
+                $('#animated-thumbnails').html('<a class="p-2 transition ease-in-out opacity-50 delay-10 hover:scale-110 item hover:opacity-100" href="'+response.imagecrop+'"><img class="img-cmnd" src="'+response.imagecrop+'"></a>');
+                $.each(response.text, function (i, item) {
+                    console.log(item);
+                    if(isNumeric(item) && !isNumber){
+                        isNumber = true;
+                        $("#numbercmnd").val(item);
+                    }
+                    if(containsLastNameCaseInsensitive(item) && !isName){
+                        isName = true;
+                        $("#name-info-ekyc").val(item);
+                    }
+                    if(parseDateFromString(item) !== null && !isbirthday){
+                        isbirthday = true;
+                        $("#birthday").val(parseDateFromString(item));
+                    }
+                    if(containsCity(item) && !addressOne){
+                        addressOne = true;
+                        $("#addressone").val(item);
+                    }
+                    if(containsCity(item)  && !addressSecond){
+                        addressSecond = true;
+                        $("#addresssecond").val(item);
+                    }
+                });
+            },
+            error: function (data) {
+                Notiflix.Loading.remove();
+                Swal.fire({
+                    title: "Xác minh không thành công!",
+                    text: "Vui lòng sử dụng giấy tờ thật. Hãy đảm bảo ảnh chụp hoặc tải lên không bị mờ hoặc bóng, thông tin hiển thị rõ ràng, dễ đọc trong điều kiện đầy đủ ánh sáng.",
+                    icon: "error"
+                });
+            },
+        }).fail(function (jqXHR, ajaxOptions, thrownError) {
+            Notiflix.Loading.remove();
+            Swal.fire({
+                title: "Xác minh không thành công!",
+                text: "Vui lòng sử dụng giấy tờ thật. Hãy đảm bảo ảnh chụp hoặc tải lên không bị mờ hoặc bóng, thông tin hiển thị rõ ràng, dễ đọc trong điều kiện đầy đủ ánh sáng.",
+                icon: "error"
+            });
+        });
+    });
+
+
+    $("#file-upload-face").on("change", function () {
+        var fileInput = $(this)[0].files[0];
+        var formData = new FormData();
+        formData.append("upload", fileInput);
+        $.ajax({
+            url: "/user/reg/seller/add/face",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {
+                Notiflix.Loading.standard();
+            },
+            complete: function () {
+                Notiflix.Loading.remove();
+            },
+            success: function (response) {
+                if(response['result'] == true){
+                    $(".face-img-ekyc").html('<a class="p-2 transition ease-in-out opacity-50 delay-10 hover:scale-110 item hover:opacity-100" href="'+response['path']+'"><img class="img-face" src="'+response['path']+'"></a>');
+                }else{
+                    Swal.fire({
+                        title: "Xác minh không thành công!",
+                        text: "Xác minh ảnh chân dung bằng cách chụp ảnh trên tay cầm CMND, một tờ giấy có chữ ký cùng dòng chữ “Bán hàng cùng Anon“ viết tay và ghi rõ ngày thực hiện",
+                        icon: "error"
+                    });
+                }
+            },
+            error: function (data) {
+                Notiflix.Loading.remove();
+                Swal.fire({
+                    title: "Xác minh không thành công!",
+                    text: "Xác minh ảnh chân dung bằng cách chụp ảnh trên tay cầm CMND, một tờ giấy có chữ ký cùng dòng chữ “Bán hàng cùng Anon“ viết tay và ghi rõ ngày thực hiện",
+                    icon: "error"
+                });
+            },
+        }).fail(function (jqXHR, ajaxOptions, thrownError) {
+            Notiflix.Loading.remove();
+            Swal.fire({
+                title: "Xác minh không thành công!",
+                text: "Xác minh ảnh chân dung bằng cách chụp ảnh trên tay cầm CMND, một tờ giấy có chữ ký cùng dòng chữ “Bán hàng cùng Anon“ viết tay và ghi rõ ngày thực hiện",
+                icon: "error"
+            });
+        });
+    });
+
+
+    function logEkyc(json) {
+        $.ajax({
+            url: "/user/reg/seller/log",
+            method: "post",
+            dataType: "json",
+            data: json,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {},
+            complete: function () {},
+            error: function (data) {
+                var errors = $.parseJSON(data.responseText);
+                Notiflix.Notify.failure(errors["message"]);
+            },
+        })
+        .done(function (data) {})
+        .fail(function (jqXHR, ajaxOptions, thrownError) {});
+    }
+
+    $(".next-face").click(function () {
+        var formData = new FormData($("#form-info-ekyc")[0]);
+        $.ajax({
+            url: "/user/reg/seller/add/info/ekyc",
+            method: "post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {
+                Notiflix.Loading.standard();
+            },
+            complete: function () {
+                Notiflix.Loading.remove();
+            },
+            success: function (response) {
+                console.log(response);
+                if(response["status"] == true){
+                    $(".info-ekyc").addClass("hidden-important");
+                    $(".add-face-ekyc").removeClass("hidden-important");
+                }else{
+                    Notiflix.Notify.failure(response["message"]);
+                }
+            },
+            error: function (data) {
+                var errors = $.parseJSON(data.responseText);
+                Notiflix.Notify.failure(errors["message"]);
+            },
+        });
+    });
+
+    $(".next-info-ekyc").click(function () {
+        if($(".img-cmnd")[0]){
+            $(".info-ekyc").removeClass("hidden-important");
+            $(".add-ekyc").addClass("hidden-important");
+        }else{
+            Swal.fire({
+                title: "Xác minh không thành công!",
+                text: "Vui lòng sử dụng giấy tờ thật. Hãy đảm bảo ảnh chụp hoặc tải lên không bị mờ hoặc bóng, thông tin hiển thị rõ ràng, dễ đọc trong điều kiện đầy đủ ánh sáng.",
+                icon: "error"
+            });
+        }
+    });
+
+    $(".next-confirm-ekyc").click(function () {
+        if($(".img-face")[0]){
+            $(".confirm-ekyc").removeClass("hidden-important");
+            $(".add-face-ekyc").addClass("hidden-important");
+        }else{
+            Swal.fire({
+                title: "Xác minh không thành công!",
+                text: "Xác minh ảnh chân dung bằng cách chụp ảnh trên tay cầm CMND, một tờ giấy có chữ ký cùng dòng chữ “Bán hàng cùng Anon“ viết tay và ghi rõ ngày thực hiện",
+                icon: "error"
+            });
+        }
+    });
+
+
+    $(".next-step-ekyc").click(function () {
+        var formData = new FormData($("#form-reg-seller")[0]);
+        $.ajax({
+            url: "/user/reg/seller/add/info",
+            method: "post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            beforeSend: function () {
+                Notiflix.Loading.standard();
+            },
+            complete: function () {
+                Notiflix.Loading.remove();
+            },
+            success: function (response) {
+                console.log(response);
+                if (response["status"] == "true") {
+                    Swal.fire({
+                        title: "Xác minh số điện thoại",
+                        text: "Mã OTP đã được gửi đến số điện thoại của bạn",
+                        input: "text",
+                        inputAttributes: {
+                          autocapitalize: "off"
+                        },
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "Xác nhận",
+                        showLoaderOnConfirm: true,
+                        denyButtonText: `Hủy`,
+                        preConfirm: async (otp) => {
+                            try {
+                              const response = await fetch('/user/reg/seller/otp', {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr("content"),
+                                },
+                                body: JSON.stringify({otp: otp})
+                              });
+                              if (!response.ok) {
+                                const responseBody = await response.json();
+                                return Swal.showValidationMessage(responseBody.message);
+                              }
+                              return response.json();
+                            } catch (error) {
+                              Swal.showValidationMessage(`
+                                Request failed: ${error}
+                              `);
+                            }
+                          },
+                          allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Xác minh thành công!",
+                                icon: "success",
+                                showCancelButton: false,
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "Tiếp tục xác minh"
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $(".add-info-seller").addClass("hidden-important");
+                                    $(".add-ekyc").removeClass("hidden-important");
+                                }
+                              });
+                        }
+                    });
+                } else {
+                    Notiflix.Notify.failure(
+                        "Lỗi! Vui lòng kiểm tra lại thông tin!"
+                    );
+                }
+            },
+            error: function (data) {
+                var errors = $.parseJSON(data.responseText);
+                Notiflix.Notify.failure(errors["message"]);
+            },
+        });
     });
 
     $("#btn-close-product-review").click(function () {

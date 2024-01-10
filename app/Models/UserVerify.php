@@ -11,6 +11,7 @@ class UserVerify extends Model
 
     public $table = "users_verify";
 
+    protected $primaryKey = 'user_id';
 
     protected $fillable = [
         'user_id',

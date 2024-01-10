@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Eky;
 use App\Models\Product;
 use App\Models\ProductMedia;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +35,20 @@ class DashBoardController extends Controller
         return view('dashboard.product', ['products' => $products]);
     }
 
+    public function ekyc(){
+        $sellers = Seller::all();
+        return view('dashboard.admin.ekyc.ekyc', ['sellers' => $sellers]);
+    }
+
+
+    public function ekycDetail($id){
+        if(is_numeric($id)){
+            $seller = Seller::where('id', $id)->first();
+            return view("dashboard.admin.ekyc.detail", ['seller' => $seller]);
+        }else{
+            return abort(404);
+        }
+    }
 
     public function productAdd(){
         $category = Category::all();
@@ -71,6 +87,19 @@ class DashBoardController extends Controller
             if($product && $product->count() > 0){
                 $product->is_confirm = $status;
                 $product->save();
+            }
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function ekycConfirmAdmin($id,$status){
+        if(is_numeric($id) && is_numeric($status) ){
+            $seller = Seller::where('id', $id)->first();
+            if($seller && $seller->count() > 0){
+                $seller->is_verified = $status;
+                $seller->save();
             }
             return redirect()->back();
         }else{

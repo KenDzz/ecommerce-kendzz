@@ -147,7 +147,7 @@
 <!--
     - custom js link
   -->
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url('js/jquery-3.7.0.min.js') }}"></script>
 <script src="{{ url('js/notiflix-3.2.6.min.js') }}"></script>
 <script src="{{ url('js/owl.carousel.min.js') }}"></script>

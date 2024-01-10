@@ -12,6 +12,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReviewsController;
 use App\Http\Controllers\ProductSaleTimerController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersChatController;
 use App\Http\Controllers\UserVerifyController;
@@ -71,6 +72,9 @@ Route::prefix('dashboard/admin')->middleware('is_admin')->name('dashboard-admin'
     Route::get('/product/{id}', [DashBoardController::class, 'productViewAdmin'])->name('-product-confirm');
     Route::get('/product/update/{id}', [DashBoardController::class, 'productUpadteAdmin'])->name('-product-update');
     Route::get('/product/update/confirm/{id}/{status}', [DashBoardController::class, 'productUpadteConfirmAdmin'])->name('-product-confirm-update');
+    Route::get('/ekyc', [DashBoardController::class, 'ekyc'])->name('-ekyc');
+    Route::get('/ekyc/{id}', [DashBoardController::class, 'ekycDetail'])->name('-ekyc-detail');
+    Route::get('/ekyc/confirm/{id}/{status}', [DashBoardController::class, 'ekycConfirmAdmin'])->name('-ekyc-confirm');
 
 });
 
@@ -103,6 +107,14 @@ Route::prefix('user')->middleware('auth')->name('user')->group(function () {
     Route::get('chat/list', [UsersChatController::class, 'listChatUser'])->name('-list-chat-user');
     Route::post('chat/detail', [UsersChatController::class, 'listChat'])->name('-chat-detail');
     Route::post('send/chat', [UsersChatController::class, 'sendChatUser'])->name('-send-chat');
+    //Reg Seller
+    Route::get('reg/seller', [UserController::class, 'regSeller'])->name('-reg-seller');
+    Route::post('reg/seller/add/info', [SellerController::class, 'addSeller'])->name('-reg-seller');
+    Route::post('reg/seller/otp', [SellerController::class, 'verifiedSeller'])->name('-veri-seller');
+    Route::post('reg/seller/log', [SellerController::class, 'logSeller'])->name('-veri-seller');
+    Route::post('reg/seller/add/info/ekyc', [SellerController::class, 'addEkyc'])->name('-veri-seller');
+    Route::post('reg/seller/add/face', [SellerController::class, 'addFace'])->name('-veri-seller');
+
 });
 
 Route::prefix('auth')->name('auth')->group(function () {

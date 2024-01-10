@@ -22,6 +22,11 @@ class UserController extends Controller
     }
 
 
+
+    public function regSeller(){
+        return view("user.regseller");
+    }
+
     public function orderSummary(){
         $orderSummary = UsersOrder::where("user_id", Auth::user()->id)->orderBy("created_at","desc")->paginate(5);
         return view("user.ordersummary", ["datas" => $orderSummary]);

@@ -584,6 +584,14 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="{{ route('dashboard-admin-ekyc') }} ">
+                        <span class="nav-link-icon">
+                            <i class="bi bi-truck"></i>
+                        </span>
+                        <span>Ekyc</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

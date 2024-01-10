@@ -13,6 +13,8 @@ class Seller extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'first_name',
+        'last_name',
         'describe',
         'rate',
         'address',
@@ -20,7 +22,9 @@ class Seller extends Model
         'city',
         'province',
         'postalcode',
-        'logo'
+        'phone',
+        'logo',
+        'is_verified'
     ];
 
     public function product()
@@ -31,5 +35,18 @@ class Seller extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ekyc()
+    {
+        return $this->hasMany(Eky::class, 'seller_id');
+    }
+
+    public function ekycMedia(){
+        return $this->hasMany(EkyMedia::class, 'seller_id');
+    }
+
+    public function logEkyc(){
+        return $this->hasMany(logEkyc::class, 'seller_id');
     }
 }

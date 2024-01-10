@@ -71,7 +71,6 @@
                         <label class="form-label">Chi tiết sản phẩm </label>
                         <textarea id="editor" class="mt-1">{!! $product->describes !!}</textarea>
                     </div>
-
                     <div class="mt-5 col-md-12">
                         <div
                             class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -81,7 +80,7 @@
                                 <div id="lightgalleryImgProduct"  class="row">
                                     @if (!empty($product->productMedia) && $product->productMedia->count())
                                         @foreach ($product->productMedia as $key => $productMedia)
-                                            <div class="card col-md-4 m-2" style="width: 18rem;">
+                                            <div class="m-2 card col-md-4" style="width: 18rem;">
                                                 <img class="card-img-top" src="{{ $productMedia->url }}">
                                                 <div class="card-body">
                                                 <button type="button" attr-id="{{ $productMedia->id }}" class="btn btn-danger btn-action-delete-imgage ">Xóa ảnh</button>
@@ -94,13 +93,13 @@
                         </div>
                     </div>
                     <div class="mt-5 col-md-12">
-                        <div class="row pt-3 border-top border-gray-200">
-                            <label for="cover-photo" class="col-form-label col-sm-3 text-gray-700">
+                        <div class="pt-3 border-gray-200 row border-top">
+                            <label for="cover-photo" class="text-gray-700 col-form-label col-sm-3">
                                 Hình ảnh
                             </label>
                             <div class="col-sm-9">
                                 <div class="mt-1">
-                                    <div class="d-flex justify-content-center align-items-center border-dashed border border-2 border-gray-300 border-dashed rounded p-5">
+                                    <div class="p-5 border border-2 border-gray-300 border-dashed rounded d-flex justify-content-center align-items-center">
                                         <div class="text-center">
 
                                             <svg class="mx-auto mb-3" width="48" height="48"  stroke="currentColor"
