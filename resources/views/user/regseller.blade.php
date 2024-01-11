@@ -66,7 +66,7 @@
             </li>
         </ol>
     </nav>
-    <div class="p-5 px-4 py-16 overflow-hidden bg-white sm:px-6 lg:px-8 lg:py-24 add-info-seller ">
+    <div class="p-5 px-4 py-16 overflow-hidden bg-white sm:px-6 lg:px-8 lg:py-24 add-info-seller hidden-important">
         <div class="relative max-w-xl mx-auto">
             <div class="text-center">
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Vui lòng nhập thông tin cá nhân
@@ -150,7 +150,7 @@
             </div>
         </div>
     </div>
-    <div class="p-5 px-4 py-16 overflow-hidden bg-white sm:px-6 lg:px-8 lg:py-24 add-ekyc hidden-important">
+    <div class="p-5 px-4 py-16 overflow-hidden bg-white sm:px-6 lg:px-8 lg:py-24 add-ekyc ">
         <div class="relative max-w-xl mx-auto">
             <div class="text-center">
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Vui lòng cung cấp hình ảnh

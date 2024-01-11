@@ -115,7 +115,7 @@ $(document).ready(function () {
         var formData = new FormData();
         formData.append("files", fileInput);
         $.ajax({
-            url: "http://127.0.0.1:8000/eKYC/",
+            url: "http://103.116.39.185:8000/eKYC/",
             type: "POST",
             data: formData,
             contentType: false,
